@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}{{ flight.flight_number }} - Flight Details{% endblock %}
+
+{% block content %}
+<div class="flight-detail-container">
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">← Back to Departures</a>
+    </div>
+
+    <div class="flight-header">
+        <h2>{{ flight.flight_number }}</h2>
+        <span class="status-badge status-{{ flight.status|lower|replace(' ', '-') }}">
+            {{ flight.status }}
+        </span>
+    </div>
+
+    <div class="flight-info-grid">
+        <div class="info-card">
+            <h3>Flight Information</h3>
+            <table class="info-table">
+                <tr>
+                    <td class="label">Flight Number:</td>
+                    <td class="value">{{ flight.flight_number }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Airline:</td>
+                    <td class="value">{{ flight.airline }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Aircraft Type:</td>
+                    <td class="value">{{ flight.aircraft_type or 'N/A' }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="info-card">
+            <h3>Route</h3>
+            <table class="info-table">
+                <tr>
+                    <td class="label">Departure:</td>
+                    <td class="value">{{ flight.departure_airport }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Arrival:</td>
+                    <td class="value">{{ flight.arrival_airport }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Scheduled Departure:</td>
+                    <td class="value">{{ flight.scheduled_departure }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Scheduled Arrival:</td>
+                    <td class="value">{{ flight.scheduled_arrival }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="info-card">
+            <h3>Terminal Information</h3>
+            <table class="info-table">
+                <tr>
+                    <td class="label">Terminal:</td>
+                    <td class="value">{{ flight.terminal or 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Gate:</td>
+                    <td class="value">{{ flight.gate or 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Status:</td>
+                    <td class="value">
+                        <span class="status-badge status-{{ flight.status|lower|replace(' ', '-') }}">
+                            {{ flight.status }}
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .flight-detail-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    .breadcrumb {
+        margin-bottom: 1.5rem;
+    }
+
+    .breadcrumb a {
+        color: #3498db;
+        text-decoration: none;
+        font-size: 0.95rem;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .flight-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #eee;
+    }
+
+    .flight-header h2 {
+        margin: 0;
+        font-size: 2rem;
+    }
+
+    .flight-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .info-card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .info-card h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 0.5rem;
+    }
+
+    .info-table {
+        width: 100%;
+    }
+
+    .info-table tr {
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-table tr:last-child {
+        border-bottom: none;
+    }
+
+    .info-table td {
+        padding: 0.75rem 0;
+    }
+
+    .info-table .label {
+        font-weight: 600;
+        color: #666;
+        width: 50%;
+    }
+
+    .info-table .value {
+        color: #2c3e50;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .status-on-time {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-delayed {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-boarding {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .status-departed {
+        background: #d6d8db;
+        color: #383d41;
+    }
+
+    .status-cancelled {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .status-scheduled {
+        background: #e2e3e5;
+        color: #383d41;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Login - FIDS{% endblock %}
+
+{% block content %}
+<div class="admin-login-container">
+    <div class="admin-login-card">
+        <h1>Staff Login</h1>
+        <p class="subtitle">Access restricted to authorized personnel</p>
+
+        <div class="vulnerability-hint">
+            <strong>⚠️ SECURITY NOTICE</strong><br>
+            This is a demonstration system with intentionally weak security controls.<br>
+            <small>Do not use real credentials in this environment.</small>
+        </div>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('login') }}" class="admin-login-form">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" class="form-control" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" class="form-control" required
+                    autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+
+        <div class="login-footer">
+            <p><strong>Default credentials for testing:</strong></p>
+            <ul>
+                <li><strong>Admin:</strong> <code>admin</code> / <code>admin123</code></li>
+                <li><strong>Operator:</strong> <code>operator</code> / <code>operator2024</code></li>
+            </ul>
+        </div>
+
+        <div class="back-link">
+            <a href="/">← Back to Home</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Override base container for login page */
+    .admin-login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+    }
+
+    .admin-login-card {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 450px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .admin-login-card h1 {
+        color: #667eea;
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 2em;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 25px;
+        font-size: 1.1em;
+    }
+
+    .vulnerability-hint {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .vulnerability-hint strong {
+        color: #856404;
+    }
+
+    .vulnerability-hint small {
+        color: #856404;
+        opacity: 0.8;
+    }
+
+    .admin-login-form {
+        margin: 25px 0;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+        font-weight: bold;
+        font-size: 0.95em;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background 0.3s;
+    }
+
+    .btn-login:hover {
+        background: #5568d3;
+    }
+
+    .error {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 12px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .login-footer {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        font-size: 0.9em;
+        color: #666;
+    }
+
+    .login-footer p {
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .login-footer ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .login-footer li {
+        margin-bottom: 8px;
+        padding: 8px;
+        background: #f8f9fa;
+        border-radius: 4px;
+    }
+
+    .login-footer code {
+        background: #e9ecef;
+        padding: 3px 8px;
+        border-radius: 3px;
+        font-family: 'Courier New', monospace;
+        color: #d63384;
+    }
+
+    .back-link {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+
+    .back-link a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .back-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}

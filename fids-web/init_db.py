@@ -1,88 +1,107 @@
-"""Databse initialisation for FIDS"""
+"""Database initialisation for FIDS"""
 import sqlite3
 import os
+import hashlib
 
 
 def init_database():
     """Initialise SQLite database with sample flight data"""
 
-    if os.path.exists('flights.db'):
-        os.remove('flights.db')
+    db_path = '/app/data/flights.db'
+    os.makedirs('/app/data', exist_ok=True)
 
-    conn = sqlite3.connect('flights.db')
+    if os.path.exists(db_path):
+        os.remove(db_path)
+
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     # Flights Table
     cursor.execute('''
-                   CREATE TABLE flights (
-                        id INTEGER PRIMARY KEY AUTO INCREMENT,
-                        flight_number TEXT NOT NULL,
-                        airline TEXT NOT NULL
-                        departure_city TEXT NOT NULL,
-                        arrival_city TEXT NOT NULL,
-                        departure_time TEXT NOT NULL,
-                        arrival_time TEXT NOT NULL,
-                        status TEXT NOT NULL,
-                        gate TEXT NOT NULL
-                   )
-                ''')
+        CREATE TABLE IF NOT EXISTS flights (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            flight_number TEXT NOT NULL,
+            airline TEXT NOT NULL,
+            departure_airport TEXT NOT NULL,
+            arrival_airport TEXT NOT NULL,
+            scheduled_departure TIMESTAMP NOT NULL,
+            scheduled_arrival TIMESTAMP NOT NULL,
+            status TEXT NOT NULL,
+            gate TEXT,
+            terminal TEXT,
+            aircraft_type TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
 
     # Users Table
     cursor.execute('''
-                   CREATE TABLE users (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        username TEXT NOT NULL UNIQUE,
-                        password TEXT NOT NULL,
-                        role TEXT NOT NULL
-                   )
-                ''')
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            role TEXT DEFAULT 'user',
+            failed_attempts INTEGER DEFAULT 0,
+            last_failed_login TIMESTAMP,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
 
+    # Audit Log Table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS audit_log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            username TEXT,
+            action TEXT,
+            ip_address TEXT,
+            user_agent TEXT
+        )
+    ''')
+
+    # Insert sample flights
     flights = [
-        ('BA123', 'British Airways', 'London',
-         'New York', '10:00', '13:00', 'On Time', 'A12'),
-        ('AA456', 'American Airlines', 'New York',
-         'Los Angeles', '14:30', '17:45', 'Delayed', 'B7'),
-        ('LH789', 'Lufthansa', 'Frankfurt', 'Tokyo',
-         '09:15', '05:30+1', 'On Time', 'C3'),
-        ('EK234', 'Emirates', 'Dubai', 'London',
-         '02:45', '07:15', 'Boarding', 'D9'),
-        ('QF567', 'Qantas', 'Sydney', 'Singapore',
-         '23:00', '05:30+1', 'On Time', 'E5'),
-        ('AF890', 'Air France', 'Paris', 'Montreal',
-         '11:20', '13:45', 'On Time', 'F2'),
-        ('UA321', 'United Airlines', 'Chicago',
-         'London', '18:00', '07:30+1', 'Delayed', 'G8'),
-        ('SQ654', 'Singapore Airlines', 'Singapore',
-         'London', '23:45', '06:15+1', 'On Time', 'H4'),
-        ('DL987', 'Delta', 'Atlanta', 'Amsterdam',
-         '17:30', '07:45+1', 'Cancelled', 'I1'),
-        ('KL246', 'KLM', 'Amsterdam', 'Beijing',
-         '13:10', '05:30+1', 'On Time', 'J6')
+        ('BA123', 'British Airways', 'LHR', 'JFK',
+         '2026-01-19 10:30:00', '2026-01-19 18:45:00', 'On Time', 'A12', 'T5', 'Boeing 777'),
+        ('EK456', 'Emirates', 'LHR', 'DXB',
+         '2026-01-19 14:00:00', '2026-01-19 23:30:00', 'Boarding', 'B23', 'T3', 'Airbus A380'),
+        ('SQ789', 'Singapore Airlines', 'LHR', 'SIN',
+         '2026-01-19 11:15:00', '2026-01-20 06:30:00', 'Delayed', 'C34', 'T2', 'Airbus A350'),
+        ('AF321', 'Air France', 'LHR', 'CDG',
+         '2026-01-19 16:20:00', '2026-01-19 18:45:00', 'Departed', 'D45', 'T4', 'Airbus A320'),
+        ('BA987', 'British Airways', 'JFK', 'LHR',
+         '2026-01-19 20:00:00', '2026-01-20 08:15:00', 'Scheduled', 'E56', 'T5', 'Boeing 787'),
     ]
 
     cursor.executemany('''
-                       INSERT INTO flights (flight_number, airline, departure_city, arrival_city, departure_time, arrival_time, status, gate)
-                       VALUES (?, ?, ?, ?, ?, ?, ?)
-                       ''', flights)
+        INSERT INTO flights (
+            flight_number, airline, departure_airport, arrival_airport,
+            scheduled_departure, scheduled_arrival, status, gate, terminal, aircraft_type
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', flights)
 
-    # Admin with weak credentials
-    cursor.execute('''
-                   INSERT INTO users (username, password, role)
-                   VALUES (?, ?, ?)
-                   ''', ('admin', 'admin123', 'administrator'))
+    admin_password = hashlib.sha256('admin123'.encode()).hexdigest()
+    operator_password = hashlib.sha256('operator2024'.encode()).hexdigest()
 
-    # Regular user
     cursor.execute('''
-                   INSERT INTO users (username, password, role)
-                   VALUES (?, ?, ?)
-                   ''', ('user', 'password', 'user'))
+        INSERT INTO users (username, password, role)
+        VALUES (?, ?, ?)
+    ''', ('admin', admin_password, 'admin'))
+
+    cursor.execute('''
+        INSERT INTO users (username, password, role)
+        VALUES (?, ?, ?)
+    ''', ('operator', operator_password, 'user'))
 
     conn.commit()
     conn.close()
 
     print("Database successfully initialised")
-    print("WARNING: Default credentials in use!")
-    print("Username: admin | Password: admin123")
+    print("Default credentials:")
+    print("Username: admin | Password: admin123 (admin role)")
+    print("Username: operator | Password: operator2024 (user role)")
 
 
 if __name__ == '__main__':

@@ -1,8 +1,8 @@
-FROM python:3.10-alpine
+FROM python:3.10-slim
+
+RUN useradd -m -u 1000 fidsapp
 
 WORKDIR /app
-
-RUN apk add --no-cache gcc musl-dev linux-headers
 
 COPY requirements.txt .
 
@@ -10,11 +10,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN python init_db.py
+RUN chown -R fidsapp:fidsapp /app && \
+    chmod 755 /app && \
+    chmod 644 /app/*.py || true && \
+    mkdir -p /app/data && \
+    chown -R fidsapp:fidsapp /app/data
 
-EXPOSE 5000
+USER fidsapp
 
-ENV FLASK_APP=app.py
-ENV FLASK_ENV=development
+EXPOSE 5001
 
-CMD ["python", "app.py"]
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:5001/health')" || exit 1
+
+CMD ["sh", "-c", "python init_db.py && python app.py"]

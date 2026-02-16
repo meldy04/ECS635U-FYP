@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Departures - FIDS{% endblock %}
+
+{% block content %}
+<div class="header-section">
+    <h2>Flight Departures</h2>
+    <p class="subtitle">Real-time flight information</p>
+</div>
+
+<!-- Search form -->
+<div class="search-section">
+    <form method="GET" action="{{ url_for('index') }}" class="search-form">
+        <input type="text" name="q" value="{{ search_query or '' }}"
+            placeholder="Search flights (flight number, airline, airport, status...)" class="search-input">
+        <button type="submit" class="btn btn-primary">Search</button>
+        {% if search_query %}
+        <a href="{{ url_for('index') }}" class="btn">Clear</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Show search results info -->
+{% if search_query %}
+<div class="search-results-info">
+    <p>Showing results for: <strong>"{{ search_query }}"</strong> ({{ flights|length }} flights found)</p>
+</div>
+{% endif %}
+
+<!-- Flights table -->
+<div class="flights-table">
+    {% if flights %}
+    <table>
+        <thead>
+            <tr>
+                <th>Flight</th>
+                <th>Airline</th>
+                <th>Route</th>
+                <th>Departure</th>
+                <th>Arrival</th>
+                <th>Status</th>
+                <th>Gate</th>
+                <th>Terminal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for flight in flights %}
+            <tr class="flight-row status-{{ flight.status|lower|replace(' ', '-') }}">
+                <td class="flight-number">
+                    <a href="{{ url_for('flight_detail', flight_id=flight.id) }}">
+                        {{ flight.flight_number }}
+                    </a>
+                </td>
+                <td>{{ flight.airline }}</td>
+                <td>{{ flight.departure_airport }} → {{ flight.arrival_airport }}</td>
+                <td>{{ flight.scheduled_departure }}</td>
+                <td>{{ flight.scheduled_arrival }}</td>
+                <td>
+                    <!-- Vulnerability: XSS - status not sanitized -->
+                    <span class="status-badge status-{{ flight.status|lower|replace(' ', '-') }}">
+                        {{ flight.status|safe }}
+                    </span>
+                </td>
+                <td>{{ flight.gate }}</td>
+                <td>{{ flight.terminal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        {% if search_query %}
+        <p>No flights found matching "{{ search_query }}".</p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">View All Flights</a>
+        {% else %}
+        <p>No flights scheduled at this time.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

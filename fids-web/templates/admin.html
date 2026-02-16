@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - FIDS{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <h2>Admin Panel</h2>
+    <p class="subtitle">Manage flights and view system logs</p>
+
+    <!-- Flight Management Section -->
+    <div class="admin-section">
+        <h3>Update Flight Status</h3>
+        <div class="flight-update-grid">
+            {% for flight in flights %}
+            <div class="flight-card">
+                <div class="flight-info">
+                    <h4>{{ flight.flight_number }}</h4>
+                    <p>{{ flight.airline }} - {{ flight.departure_airport }} → {{ flight.arrival_airport }}</p>
+                    <p class="current-status">Current:
+                        <span class="status-badge status-{{ flight.status|lower|replace(' ', '-') }}">
+                            {{ flight.status }}
+                        </span>
+                    </p>
+                </div>
+                <form method="POST" action="{{ url_for('update_flight', flight_id=flight.id) }}" class="status-form">
+                    <select name="status" class="form-control">
+                        <option value="Scheduled" {% if flight.status=='Scheduled' %}selected{% endif %}>Scheduled
+                        </option>
+                        <option value="On Time" {% if flight.status=='On Time' %}selected{% endif %}>On Time</option>
+                        <option value="Delayed" {% if flight.status=='Delayed' %}selected{% endif %}>Delayed</option>
+                        <option value="Boarding" {% if flight.status=='Boarding' %}selected{% endif %}>Boarding</option>
+                        <option value="Departed" {% if flight.status=='Departed' %}selected{% endif %}>Departed</option>
+                        <option value="Cancelled" {% if flight.status=='Cancelled' %}selected{% endif %}>Cancelled
+                        </option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- User Management Section -->
+    <div class="admin-section">
+        <h3>System Users</h3>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Failed Attempts</th>
+                    <th>Last Failed Login</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        <span class="role-badge role-{{ user.role }}">{{ user.role }}</span>
+                    </td>
+                    <td>{{ user.failed_attempts }}</td>
+                    <td>{{ user.last_failed_login or 'Never' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Audit Log Section -->
+    <div class="admin-section">
+        <h3>Recent Activity Log</h3>
+        <div class="log-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>IP Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{ log.timestamp }}</td>
+                        <td>{{ log.username }}</td>
+                        <td>{{ log.action }}</td>
+                        <td>{{ log.ip_address }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .admin-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    .admin-section {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .admin-section h3 {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 0.5rem;
+    }
+
+    .flight-update-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1rem;
+    }
+
+    .flight-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 1rem;
+        background: #f8f9fa;
+    }
+
+    .flight-card h4 {
+        margin: 0 0 0.5rem 0;
+        color: #2c3e50;
+    }
+
+    .flight-card p {
+        margin: 0.25rem 0;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .current-status {
+        margin-top: 0.75rem !important;
+    }
+
+    .status-form {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .status-form select {
+        flex: 1;
+    }
+
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+    }
+
+    .admin-table thead {
+        background: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .admin-table th {
+        padding: 0.75rem;
+        text-align: left;
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .admin-table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .admin-table tbody tr:hover {
+        background: #f8f9fa;
+    }
+
+    .role-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .role-admin {
+        background: #e7f3ff;
+        color: #0066cc;
+    }
+
+    .role-user {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .log-container {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
