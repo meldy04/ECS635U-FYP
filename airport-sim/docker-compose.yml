@@ -1,0 +1,162 @@
+# ============================================================
+# Airport IT Simulation - Docker Compose
+# ============================================================
+# Architecture: Hub-and-spoke topology
+#   Online Booking → DCS (hub) → FIDS
+#                              → Baggage Handling System
+# ============================================================
+
+services:
+
+  # --------------------------------------------------------
+  # PostgreSQL Database for DCS (central hub)
+  # VULNERABILITY: Default credentials, no SSL, port exposed
+  # --------------------------------------------------------
+  dcs-db:
+    image: postgres:14
+    container_name: airport-dcs-db
+    environment:
+      POSTGRES_DB: dcs
+      POSTGRES_USER: dcs_user
+      POSTGRES_PASSWORD: dcs_password
+    volumes:
+      - ./dcs/init_db.sql:/docker-entrypoint-initdb.d/01_init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - airport-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dcs_user -d dcs"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --------------------------------------------------------
+  # PostgreSQL Database for BHS (separate OT database)
+  # VULNERABILITY: Default credentials, port exposed
+  # --------------------------------------------------------
+  bhs-db:
+    image: postgres:14
+    container_name: airport-bhs-db
+    environment:
+      POSTGRES_DB: bhs
+      POSTGRES_USER: bhs_user
+      POSTGRES_PASSWORD: bhs_password
+    volumes:
+      - ./bhs/init_db.sql:/docker-entrypoint-initdb.d/01_init.sql
+    ports:
+      - "5433:5432"
+    networks:
+      - airport-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bhs_user -d bhs"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --------------------------------------------------------
+  # Redis - Message broker for pub/sub (DCS → FIDS, BHS)
+  # VULNERABILITY: No authentication, no TLS
+  # --------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: airport-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - airport-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --------------------------------------------------------
+  # Departure Control System (DCS) - Central Hub
+  # --------------------------------------------------------
+  dcs:
+    build: ./dcs
+    container_name: airport-dcs
+    ports:
+      - "8080:5000"
+    environment:
+      DB_HOST: dcs-db
+      DB_PORT: "5432"
+      DB_NAME: dcs
+      DB_USER: dcs_user
+      DB_PASSWORD: dcs_password
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      JWT_SECRET: airport-secret-key-2024
+    depends_on:
+      dcs-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - airport-net
+
+  # --------------------------------------------------------
+  # Flight Information Display System (FIDS)
+  # Subscribes to DCS flight updates via Redis
+  # --------------------------------------------------------
+  fids:
+    build: ./fids
+    container_name: airport-fids
+    ports:
+      - "5001:5001"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      DCS_API_URL: http://dcs:5000
+    depends_on:
+      - redis
+      - dcs
+    networks:
+      - airport-net
+
+  # --------------------------------------------------------
+  # Online Booking System (Internet-facing entry point)
+  # Sends bookings + PII to DCS via REST API
+  # --------------------------------------------------------
+  booking:
+    build: ./booking
+    container_name: airport-booking
+    ports:
+      - "5002:5002"
+    environment:
+      DCS_API_URL: http://dcs:5000
+    depends_on:
+      - dcs
+    networks:
+      - airport-net
+
+  # --------------------------------------------------------
+  # Baggage Handling System (Internal OT)
+  # Subscribes to DCS baggage routing via Redis
+  # --------------------------------------------------------
+  bhs:
+    build: ./bhs
+    container_name: airport-bhs
+    ports:
+      - "5003:5003"
+    environment:
+      DB_HOST: bhs-db
+      DB_PORT: "5432"
+      DB_NAME: bhs
+      DB_USER: bhs_user
+      DB_PASSWORD: bhs_password
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    depends_on:
+      bhs-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - airport-net
+
+networks:
+  airport-net:
+    driver: bridge
+    # VULNERABILITY: Flat network - no segmentation between systems

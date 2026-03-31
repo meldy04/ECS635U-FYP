@@ -1,0 +1,387 @@
+{
+  "metadata": {
+    "timestamp": "2026-03-25T00:00:00",
+    "source": "airport_simulation_scan",
+    "target": "airport-sim (4-system hub-and-spoke)",
+    "systems": ["booking", "dcs", "fids", "bhs"],
+    "architecture": "hub-and-spoke with DCS as central node",
+    "standards_reference": "Open Architecture for Airport Security Systems (Annex 3)"
+  },
+  "vulnerabilities": [
+    {
+      "id": "VULN_BOOKING_SQLI",
+      "type": "SQL Injection",
+      "system": "booking",
+      "location": "/manage?ref=",
+      "cvss": 8.6,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-89",
+      "exploitable": true,
+      "description": "Booking lookup concatenates user input directly into SQL query"
+    },
+    {
+      "id": "VULN_BOOKING_IDOR",
+      "type": "IDOR",
+      "system": "booking",
+      "location": "/api/bookings/<id>",
+      "cvss": 6.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-639",
+      "exploitable": true,
+      "description": "Sequential booking IDs allow enumeration without authentication"
+    },
+    {
+      "id": "VULN_BOOKING_INFO_DISC",
+      "type": "Information Disclosure",
+      "system": "booking",
+      "location": "Error messages",
+      "cvss": 5.3,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-200",
+      "exploitable": true,
+      "description": "Database error messages expose schema details"
+    },
+    {
+      "id": "VULN_BOOKING_NO_CSRF",
+      "type": "Missing CSRF Protection",
+      "system": "booking",
+      "location": "/book POST",
+      "cvss": 4.3,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-352",
+      "exploitable": true,
+      "description": "Booking form has no CSRF token"
+    },
+    {
+      "id": "VULN_DCS_SQLI",
+      "type": "SQL Injection",
+      "system": "dcs",
+      "location": "/api/passengers?search=",
+      "cvss": 8.6,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-89",
+      "exploitable": true,
+      "description": "Passenger lookup uses string formatting instead of parameterised queries"
+    },
+    {
+      "id": "VULN_DCS_JWT",
+      "type": "JWT Algorithm Confusion",
+      "system": "dcs",
+      "location": "/api/auth/login",
+      "cvss": 9.1,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "severity": "CRITICAL",
+      "cwe": "CWE-327",
+      "exploitable": true,
+      "description": "JWT verification accepts 'none' algorithm, allowing token forgery"
+    },
+    {
+      "id": "VULN_DCS_MASS_ASSIGN",
+      "type": "Mass Assignment",
+      "system": "dcs",
+      "location": "/api/checkin POST",
+      "cvss": 6.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-915",
+      "exploitable": true,
+      "description": "Check-in endpoint accepts arbitrary fields including travel_class and seat_number"
+    },
+    {
+      "id": "VULN_DCS_IDOR",
+      "type": "IDOR",
+      "system": "dcs",
+      "location": "/api/bookings/<reference>",
+      "cvss": 6.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-639",
+      "exploitable": true,
+      "description": "Any authenticated user can view any booking including PII"
+    },
+    {
+      "id": "VULN_DCS_WEAK_CREDS",
+      "type": "Weak Credentials",
+      "system": "dcs",
+      "location": "/api/auth/login",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-521",
+      "exploitable": true,
+      "description": "Default credentials admin/admin123, operator/operator1, MD5 hashing"
+    },
+    {
+      "id": "VULN_DCS_INFO_DISC",
+      "type": "Information Disclosure",
+      "system": "dcs",
+      "location": "/api/system",
+      "cvss": 5.3,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-200",
+      "exploitable": true,
+      "description": "Unauthenticated endpoint exposes DB version, endpoints, Redis config"
+    },
+    {
+      "id": "VULN_DCS_NO_RBAC",
+      "type": "Broken Access Control",
+      "system": "dcs",
+      "location": "/api/manifest/<flight>",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-862",
+      "exploitable": true,
+      "description": "No role enforcement - kiosk accounts can access full passenger manifests"
+    },
+    {
+      "id": "VULN_DCS_NO_LOGGING",
+      "type": "Missing Audit Logging",
+      "system": "dcs",
+      "location": "System-wide",
+      "cvss": 3.7,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "severity": "LOW",
+      "cwe": "CWE-778",
+      "exploitable": false,
+      "description": "No audit trail for authentication, check-in, or data access events"
+    },
+    {
+      "id": "VULN_FIDS_SQLI",
+      "type": "SQL Injection",
+      "system": "fids",
+      "location": "/admin/search?q=",
+      "cvss": 8.6,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-89",
+      "exploitable": true,
+      "description": "Admin search concatenates input directly into SQL query"
+    },
+    {
+      "id": "VULN_FIDS_DEFAULT_CREDS",
+      "type": "Default Credentials",
+      "system": "fids",
+      "location": "/admin/login",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-798",
+      "exploitable": true,
+      "description": "Admin panel uses admin/admin with plaintext storage"
+    },
+    {
+      "id": "VULN_FIDS_XSS",
+      "type": "Stored XSS",
+      "system": "fids",
+      "location": "Flight status display",
+      "cvss": 6.1,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-79",
+      "exploitable": true,
+      "description": "Flight status rendered with |safe filter, allowing injected HTML/JS"
+    },
+    {
+      "id": "VULN_FIDS_INFO_DISC",
+      "type": "Information Disclosure",
+      "system": "fids",
+      "location": "/admin/panel",
+      "cvss": 5.3,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-200",
+      "exploitable": true,
+      "description": "Admin panel exposes DB path, DCS endpoint, Redis connection details"
+    },
+    {
+      "id": "VULN_FIDS_NO_SESSION",
+      "type": "Missing Session Management",
+      "system": "fids",
+      "location": "/admin/panel",
+      "cvss": 5.4,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-384",
+      "exploitable": true,
+      "description": "Admin panel accessible via direct URL without session validation"
+    },
+    {
+      "id": "VULN_BHS_CMD_INJECTION",
+      "type": "Command Injection",
+      "system": "bhs",
+      "location": "/api/maintenance/diagnostic POST",
+      "cvss": 9.8,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "severity": "CRITICAL",
+      "cwe": "CWE-78",
+      "exploitable": true,
+      "description": "Diagnostic endpoint passes target parameter to shell without sanitisation"
+    },
+    {
+      "id": "VULN_BHS_DEFAULT_CREDS",
+      "type": "Default Credentials",
+      "system": "bhs",
+      "location": "PostgreSQL 5433",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-798",
+      "exploitable": true,
+      "description": "BHS database uses bhs_user/bhs_password, operator/operator123"
+    },
+    {
+      "id": "VULN_BHS_NO_AUTH",
+      "type": "Missing Authentication",
+      "system": "bhs",
+      "location": "/api/track, /api/maintenance/config",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-306",
+      "exploitable": true,
+      "description": "Tracking and maintenance config endpoints require no authentication"
+    },
+    {
+      "id": "VULN_BHS_CONFIG_EXPOSURE",
+      "type": "Sensitive Data Exposure",
+      "system": "bhs",
+      "location": "/api/maintenance/config",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-200",
+      "exploitable": true,
+      "description": "Exposes API keys, DCS endpoint, Redis channel, DB credentials in config"
+    },
+    {
+      "id": "VULN_NETWORK_FLAT",
+      "type": "No Network Segmentation",
+      "system": "network",
+      "location": "Docker network (airport-net)",
+      "cvss": 6.5,
+      "cvss_vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-284",
+      "exploitable": true,
+      "description": "All systems on flat network with no segmentation"
+    },
+    {
+      "id": "VULN_NETWORK_NO_TLS",
+      "type": "Unencrypted Communication",
+      "system": "network",
+      "location": "Inter-service traffic",
+      "cvss": 5.9,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-319",
+      "exploitable": true,
+      "description": "No TLS between services; Redis and PostgreSQL connections unencrypted"
+    },
+    {
+      "id": "VULN_REDIS_NO_AUTH",
+      "type": "Unauthenticated Service",
+      "system": "redis",
+      "location": "Redis port 6379",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-306",
+      "exploitable": true,
+      "description": "Redis has no authentication; attacker can subscribe/publish to all channels"
+    },
+    {
+      "id": "VULN_PII_PLAINTEXT",
+      "type": "Unencrypted PII Storage",
+      "system": "dcs",
+      "location": "PostgreSQL passengers table",
+      "cvss": 6.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-312",
+      "exploitable": true,
+      "description": "Passenger PII (names, passport numbers, DOB) stored in plaintext, violating UK GDPR Art. 32"
+    }
+  ],
+  "assets": [
+    {"id": "BOOKING_WEB", "name": "Booking Web Interface", "system": "booking", "criticality": 0.5, "description": "Internet-facing passenger booking portal"},
+    {"id": "BOOKING_DB", "name": "Booking Database", "system": "booking", "criticality": 0.7, "description": "Local SQLite with passenger PII and payment data"},
+    {"id": "DCS_API", "name": "DCS REST API", "system": "dcs", "criticality": 0.8, "description": "Central API for check-in, flights, manifests"},
+    {"id": "DCS_CHECKIN", "name": "DCS Check-in Interface", "system": "dcs", "criticality": 0.85, "description": "Kiosk-facing check-in and boarding pass generation"},
+    {"id": "DCS_DATABASE", "name": "DCS Database", "system": "dcs", "criticality": 0.95, "description": "Central PostgreSQL with all passenger, flight, and boarding data"},
+    {"id": "DCS_ADMIN", "name": "DCS Admin Access", "system": "dcs", "criticality": 1.0, "description": "Full administrative control over DCS"},
+    {"id": "PASSENGER_MANIFEST", "name": "Passenger Manifest Data", "system": "dcs", "criticality": 0.95, "description": "Complete flight manifests with PII - NASP sensitive"},
+    {"id": "BOARDING_PASS_FORGERY", "name": "Boarding Pass Forgery", "system": "dcs", "criticality": 1.0, "description": "Ability to generate fraudulent boarding passes - aviation security violation"},
+    {"id": "FIDS_DISPLAY", "name": "FIDS Public Display", "system": "fids", "criticality": 0.4, "description": "Public-facing flight information display"},
+    {"id": "FIDS_ADMIN", "name": "FIDS Admin Panel", "system": "fids", "criticality": 0.85, "description": "Administrative control of flight display data"},
+    {"id": "FIDS_DB", "name": "FIDS Local Cache", "system": "fids", "criticality": 0.6, "description": "SQLite cache of flight data"},
+    {"id": "BHS_API", "name": "BHS Tracking API", "system": "bhs", "criticality": 0.7, "description": "Baggage tracking and status endpoints"},
+    {"id": "BHS_DATABASE", "name": "BHS Database", "system": "bhs", "criticality": 0.8, "description": "PostgreSQL with bag tracking and passenger linkages"},
+    {"id": "BHS_RCE", "name": "BHS Remote Code Execution", "system": "bhs", "criticality": 1.0, "description": "Shell access on BHS container via command injection"},
+    {"id": "BHS_CONFIG", "name": "BHS System Configuration", "system": "bhs", "criticality": 0.75, "description": "Exposed maintenance config with API keys and internal endpoints"},
+    {"id": "REDIS_ACCESS", "name": "Redis Message Broker", "system": "redis", "criticality": 0.85, "description": "Pub/sub broker - can inject false flight updates and bag routing"},
+    {"id": "PII_EXFILTRATION", "name": "Mass PII Exfiltration", "system": "dcs", "criticality": 1.0, "description": "Extraction of passenger PII across systems - UK GDPR breach"}
+  ],
+  "cross_system_edges": [
+    {
+      "from_system": "booking", "to_system": "dcs",
+      "from_asset": "BOOKING_DB", "to_asset": "DCS_API",
+      "exploitability": 0.7, "impact": 0.6, "time_estimate": 5.0,
+      "description": "Credentials/tokens from booking DB used to authenticate to DCS API"
+    },
+    {
+      "from_system": "dcs", "to_system": "fids",
+      "from_asset": "DCS_ADMIN", "to_asset": "FIDS_ADMIN",
+      "exploitability": 0.85, "impact": 0.8, "time_estimate": 2.0,
+      "description": "DCS admin access reveals FIDS endpoint; inject malicious flight status via Redis"
+    },
+    {
+      "from_system": "dcs", "to_system": "bhs",
+      "from_asset": "DCS_DATABASE", "to_asset": "BHS_API",
+      "exploitability": 0.8, "impact": 0.7, "time_estimate": 3.0,
+      "description": "DCS DB credentials/config enable access to BHS tracking API"
+    },
+    {
+      "from_system": "dcs", "to_system": "redis",
+      "from_asset": "DCS_INFO_DISC", "to_asset": "REDIS_ACCESS",
+      "exploitability": 0.9, "impact": 0.85, "time_estimate": 1.0,
+      "description": "DCS /api/system exposes Redis host; connect to unauthenticated Redis"
+    },
+    {
+      "from_system": "redis", "to_system": "fids",
+      "from_asset": "REDIS_ACCESS", "to_asset": "FIDS_DISPLAY",
+      "exploitability": 0.95, "impact": 0.9, "time_estimate": 1.0,
+      "description": "Publish false flight updates to fids:updates channel"
+    },
+    {
+      "from_system": "redis", "to_system": "bhs",
+      "from_asset": "REDIS_ACCESS", "to_asset": "BHS_API",
+      "exploitability": 0.95, "impact": 0.85, "time_estimate": 1.0,
+      "description": "Publish false baggage routing to bhs:routing channel"
+    },
+    {
+      "from_system": "fids", "to_system": "dcs",
+      "from_asset": "FIDS_ADMIN", "to_asset": "DCS_API",
+      "exploitability": 0.6, "impact": 0.5, "time_estimate": 5.0,
+      "description": "FIDS admin panel exposes DCS endpoint URL; attempt DCS access"
+    },
+    {
+      "from_system": "bhs", "to_system": "dcs",
+      "from_asset": "BHS_CONFIG", "to_asset": "DCS_API",
+      "exploitability": 0.7, "impact": 0.6, "time_estimate": 3.0,
+      "description": "BHS config exposes DCS endpoint and API key"
+    },
+    {
+      "from_system": "bhs", "to_system": "network",
+      "from_asset": "BHS_RCE", "to_asset": "NETWORK_PIVOT",
+      "exploitability": 0.9, "impact": 0.95, "time_estimate": 2.0,
+      "description": "Shell access on BHS enables network scanning and lateral movement to all systems"
+    }
+  ]
+}

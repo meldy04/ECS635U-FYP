@@ -1,0 +1,1068 @@
+{
+  "metadata": {
+    "timestamp": "2026-03-27T08:53:54.306138",
+    "total_nodes": 44,
+    "total_edges": 58
+  },
+  "nodes": [
+    {
+      "id": "INITIAL_STATE",
+      "type": "initial_state",
+      "label": "External Attacker (Kali VM)",
+      "criticality": 0.0,
+      "system": "external",
+      "exploitable": true
+    },
+    {
+      "id": "VULN_BOOKING_SQLI",
+      "type": "vulnerability",
+      "label": "SQL Injection (booking)",
+      "cvss": 8.6,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-89",
+      "location": "/manage?ref=",
+      "system": "booking",
+      "exploitable": true,
+      "description": "Booking lookup concatenates user input directly into SQL query"
+    },
+    {
+      "id": "VULN_BOOKING_IDOR",
+      "type": "vulnerability",
+      "label": "IDOR (booking)",
+      "cvss": 6.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-639",
+      "location": "/api/bookings/<id>",
+      "system": "booking",
+      "exploitable": true,
+      "description": "Sequential booking IDs allow enumeration without authentication"
+    },
+    {
+      "id": "VULN_BOOKING_INFO_DISC",
+      "type": "vulnerability",
+      "label": "Information Disclosure (booking)",
+      "cvss": 5.3,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-200",
+      "location": "Error messages",
+      "system": "booking",
+      "exploitable": true,
+      "description": "Database error messages expose schema details"
+    },
+    {
+      "id": "VULN_BOOKING_NO_CSRF",
+      "type": "vulnerability",
+      "label": "Missing CSRF Protection (booking)",
+      "cvss": 4.3,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-352",
+      "location": "/book POST",
+      "system": "booking",
+      "exploitable": true,
+      "description": "Booking form has no CSRF token"
+    },
+    {
+      "id": "VULN_DCS_SQLI",
+      "type": "vulnerability",
+      "label": "SQL Injection (dcs)",
+      "cvss": 8.6,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-89",
+      "location": "/api/passengers?search=",
+      "system": "dcs",
+      "exploitable": true,
+      "description": "Passenger lookup uses string formatting instead of parameterised queries"
+    },
+    {
+      "id": "VULN_DCS_JWT",
+      "type": "vulnerability",
+      "label": "JWT Algorithm Confusion (dcs)",
+      "cvss": 9.1,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "severity": "CRITICAL",
+      "cwe": "CWE-327",
+      "location": "/api/auth/login",
+      "system": "dcs",
+      "exploitable": true,
+      "description": "JWT verification accepts 'none' algorithm, allowing token forgery"
+    },
+    {
+      "id": "VULN_DCS_MASS_ASSIGN",
+      "type": "vulnerability",
+      "label": "Mass Assignment (dcs)",
+      "cvss": 6.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-915",
+      "location": "/api/checkin POST",
+      "system": "dcs",
+      "exploitable": true,
+      "description": "Check-in endpoint accepts arbitrary fields including travel_class and seat_number"
+    },
+    {
+      "id": "VULN_DCS_IDOR",
+      "type": "vulnerability",
+      "label": "IDOR (dcs)",
+      "cvss": 6.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-639",
+      "location": "/api/bookings/<reference>",
+      "system": "dcs",
+      "exploitable": true,
+      "description": "Any authenticated user can view any booking including PII"
+    },
+    {
+      "id": "VULN_DCS_WEAK_CREDS",
+      "type": "vulnerability",
+      "label": "Weak Credentials (dcs)",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-521",
+      "location": "/api/auth/login",
+      "system": "dcs",
+      "exploitable": true,
+      "description": "Default credentials admin/admin123, operator/operator1, MD5 hashing"
+    },
+    {
+      "id": "VULN_DCS_INFO_DISC",
+      "type": "vulnerability",
+      "label": "Information Disclosure (dcs)",
+      "cvss": 5.3,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-200",
+      "location": "/api/system",
+      "system": "dcs",
+      "exploitable": true,
+      "description": "Unauthenticated endpoint exposes DB version, endpoints, Redis config"
+    },
+    {
+      "id": "VULN_DCS_NO_RBAC",
+      "type": "vulnerability",
+      "label": "Broken Access Control (dcs)",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-862",
+      "location": "/api/manifest/<flight>",
+      "system": "dcs",
+      "exploitable": true,
+      "description": "No role enforcement - kiosk accounts can access full passenger manifests"
+    },
+    {
+      "id": "VULN_DCS_NO_LOGGING",
+      "type": "vulnerability",
+      "label": "Missing Audit Logging (dcs)",
+      "cvss": 3.7,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "severity": "LOW",
+      "cwe": "CWE-778",
+      "location": "System-wide",
+      "system": "dcs",
+      "exploitable": false,
+      "description": "No audit trail for authentication, check-in, or data access events"
+    },
+    {
+      "id": "VULN_FIDS_SQLI",
+      "type": "vulnerability",
+      "label": "SQL Injection (fids)",
+      "cvss": 8.6,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-89",
+      "location": "/admin/search?q=",
+      "system": "fids",
+      "exploitable": true,
+      "description": "Admin search concatenates input directly into SQL query"
+    },
+    {
+      "id": "VULN_FIDS_DEFAULT_CREDS",
+      "type": "vulnerability",
+      "label": "Default Credentials (fids)",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-798",
+      "location": "/admin/login",
+      "system": "fids",
+      "exploitable": true,
+      "description": "Admin panel uses admin/admin with plaintext storage"
+    },
+    {
+      "id": "VULN_FIDS_XSS",
+      "type": "vulnerability",
+      "label": "Stored XSS (fids)",
+      "cvss": 6.1,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-79",
+      "location": "Flight status display",
+      "system": "fids",
+      "exploitable": true,
+      "description": "Flight status rendered with |safe filter, allowing injected HTML/JS"
+    },
+    {
+      "id": "VULN_FIDS_INFO_DISC",
+      "type": "vulnerability",
+      "label": "Information Disclosure (fids)",
+      "cvss": 5.3,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-200",
+      "location": "/admin/panel",
+      "system": "fids",
+      "exploitable": true,
+      "description": "Admin panel exposes DB path, DCS endpoint, Redis connection details"
+    },
+    {
+      "id": "VULN_FIDS_NO_SESSION",
+      "type": "vulnerability",
+      "label": "Missing Session Management (fids)",
+      "cvss": 5.4,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-384",
+      "location": "/admin/panel",
+      "system": "fids",
+      "exploitable": true,
+      "description": "Admin panel accessible via direct URL without session validation"
+    },
+    {
+      "id": "VULN_BHS_CMD_INJECTION",
+      "type": "vulnerability",
+      "label": "Command Injection (bhs)",
+      "cvss": 9.8,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "severity": "CRITICAL",
+      "cwe": "CWE-78",
+      "location": "/api/maintenance/diagnostic POST",
+      "system": "bhs",
+      "exploitable": true,
+      "description": "Diagnostic endpoint passes target parameter to shell without sanitisation"
+    },
+    {
+      "id": "VULN_BHS_DEFAULT_CREDS",
+      "type": "vulnerability",
+      "label": "Default Credentials (bhs)",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-798",
+      "location": "PostgreSQL 5433",
+      "system": "bhs",
+      "exploitable": true,
+      "description": "BHS database uses bhs_user/bhs_password, operator/operator123"
+    },
+    {
+      "id": "VULN_BHS_NO_AUTH",
+      "type": "vulnerability",
+      "label": "Missing Authentication (bhs)",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-306",
+      "location": "/api/track, /api/maintenance/config",
+      "system": "bhs",
+      "exploitable": true,
+      "description": "Tracking and maintenance config endpoints require no authentication"
+    },
+    {
+      "id": "VULN_BHS_CONFIG_EXPOSURE",
+      "type": "vulnerability",
+      "label": "Sensitive Data Exposure (bhs)",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-200",
+      "location": "/api/maintenance/config",
+      "system": "bhs",
+      "exploitable": true,
+      "description": "Exposes API keys, DCS endpoint, Redis channel, DB credentials in config"
+    },
+    {
+      "id": "VULN_NETWORK_FLAT",
+      "type": "vulnerability",
+      "label": "No Network Segmentation (network)",
+      "cvss": 6.5,
+      "cvss_vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-284",
+      "location": "Docker network (airport-net)",
+      "system": "network",
+      "exploitable": true,
+      "description": "All systems on flat network with no segmentation"
+    },
+    {
+      "id": "VULN_NETWORK_NO_TLS",
+      "type": "vulnerability",
+      "label": "Unencrypted Communication (network)",
+      "cvss": 5.9,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-319",
+      "location": "Inter-service traffic",
+      "system": "network",
+      "exploitable": true,
+      "description": "No TLS between services; Redis and PostgreSQL connections unencrypted"
+    },
+    {
+      "id": "VULN_REDIS_NO_AUTH",
+      "type": "vulnerability",
+      "label": "Unauthenticated Service (redis)",
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "HIGH",
+      "cwe": "CWE-306",
+      "location": "Redis port 6379",
+      "system": "redis",
+      "exploitable": true,
+      "description": "Redis has no authentication; attacker can subscribe/publish to all channels"
+    },
+    {
+      "id": "VULN_PII_PLAINTEXT",
+      "type": "vulnerability",
+      "label": "Unencrypted PII Storage (dcs)",
+      "cvss": 6.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "severity": "MEDIUM",
+      "cwe": "CWE-312",
+      "location": "PostgreSQL passengers table",
+      "system": "dcs",
+      "exploitable": true,
+      "description": "Passenger PII (names, passport numbers, DOB) stored in plaintext, violating UK GDPR Art. 32"
+    },
+    {
+      "id": "ASSET_BOOKING_WEB",
+      "type": "asset",
+      "label": "Booking Web Interface",
+      "criticality": 0.5,
+      "description": "Internet-facing passenger booking portal",
+      "system": "booking"
+    },
+    {
+      "id": "ASSET_BOOKING_DB",
+      "type": "asset",
+      "label": "Booking Database",
+      "criticality": 0.7,
+      "description": "Local SQLite with passenger PII and payment data",
+      "system": "booking"
+    },
+    {
+      "id": "ASSET_DCS_API",
+      "type": "asset",
+      "label": "DCS REST API",
+      "criticality": 0.8,
+      "description": "Central API for check-in, flights, manifests",
+      "system": "dcs"
+    },
+    {
+      "id": "ASSET_DCS_CHECKIN",
+      "type": "asset",
+      "label": "DCS Check-in Interface",
+      "criticality": 0.85,
+      "description": "Kiosk-facing check-in and boarding pass generation",
+      "system": "dcs"
+    },
+    {
+      "id": "ASSET_DCS_DATABASE",
+      "type": "asset",
+      "label": "DCS Database",
+      "criticality": 0.95,
+      "description": "Central PostgreSQL with all passenger, flight, and boarding data",
+      "system": "dcs"
+    },
+    {
+      "id": "ASSET_DCS_ADMIN",
+      "type": "asset",
+      "label": "DCS Admin Access",
+      "criticality": 1.0,
+      "description": "Full administrative control over DCS",
+      "system": "dcs"
+    },
+    {
+      "id": "ASSET_PASSENGER_MANIFEST",
+      "type": "asset",
+      "label": "Passenger Manifest Data",
+      "criticality": 0.95,
+      "description": "Complete flight manifests with PII - NASP sensitive",
+      "system": "dcs"
+    },
+    {
+      "id": "ASSET_BOARDING_PASS_FORGERY",
+      "type": "asset",
+      "label": "Boarding Pass Forgery",
+      "criticality": 1.0,
+      "description": "Ability to generate fraudulent boarding passes - aviation security violation",
+      "system": "dcs"
+    },
+    {
+      "id": "ASSET_FIDS_DISPLAY",
+      "type": "asset",
+      "label": "FIDS Public Display",
+      "criticality": 0.4,
+      "description": "Public-facing flight information display",
+      "system": "fids"
+    },
+    {
+      "id": "ASSET_FIDS_ADMIN",
+      "type": "asset",
+      "label": "FIDS Admin Panel",
+      "criticality": 0.85,
+      "description": "Administrative control of flight display data",
+      "system": "fids"
+    },
+    {
+      "id": "ASSET_FIDS_DB",
+      "type": "asset",
+      "label": "FIDS Local Cache",
+      "criticality": 0.6,
+      "description": "SQLite cache of flight data",
+      "system": "fids"
+    },
+    {
+      "id": "ASSET_BHS_API",
+      "type": "asset",
+      "label": "BHS Tracking API",
+      "criticality": 0.7,
+      "description": "Baggage tracking and status endpoints",
+      "system": "bhs"
+    },
+    {
+      "id": "ASSET_BHS_DATABASE",
+      "type": "asset",
+      "label": "BHS Database",
+      "criticality": 0.8,
+      "description": "PostgreSQL with bag tracking and passenger linkages",
+      "system": "bhs"
+    },
+    {
+      "id": "ASSET_BHS_RCE",
+      "type": "asset",
+      "label": "BHS Remote Code Execution",
+      "criticality": 1.0,
+      "description": "Shell access on BHS container via command injection",
+      "system": "bhs"
+    },
+    {
+      "id": "ASSET_BHS_CONFIG",
+      "type": "asset",
+      "label": "BHS System Configuration",
+      "criticality": 0.75,
+      "description": "Exposed maintenance config with API keys and internal endpoints",
+      "system": "bhs"
+    },
+    {
+      "id": "ASSET_REDIS_ACCESS",
+      "type": "asset",
+      "label": "Redis Message Broker",
+      "criticality": 0.85,
+      "description": "Pub/sub broker - can inject false flight updates and bag routing",
+      "system": "redis"
+    },
+    {
+      "id": "ASSET_PII_EXFILTRATION",
+      "type": "asset",
+      "label": "Mass PII Exfiltration",
+      "criticality": 1.0,
+      "description": "Extraction of passenger PII across systems - UK GDPR breach",
+      "system": "dcs"
+    },
+    {
+      "id": "ASSET_NETWORK_PIVOT",
+      "type": "asset",
+      "label": "Network Pivot Point",
+      "criticality": 0.9,
+      "description": "Shell access for lateral movement",
+      "system": "network"
+    }
+  ],
+  "edges": [
+    {
+      "source": "INITIAL_STATE",
+      "target": "ASSET_BOOKING_WEB",
+      "weight": 0.09090909090909091,
+      "exploitability": 1.0,
+      "impact": 0.1,
+      "time_estimate": 0.1,
+      "stealth": 1.0,
+      "description": "Access public booking website"
+    },
+    {
+      "source": "INITIAL_STATE",
+      "target": "ASSET_FIDS_DISPLAY",
+      "weight": 0.045454545454545456,
+      "exploitability": 1.0,
+      "impact": 0.05,
+      "time_estimate": 0.1,
+      "stealth": 1.0,
+      "description": "View public flight display"
+    },
+    {
+      "source": "INITIAL_STATE",
+      "target": "ASSET_DCS_API",
+      "weight": 0.07500000000000001,
+      "exploitability": 0.9,
+      "impact": 0.1,
+      "time_estimate": 0.2,
+      "stealth": 0.9,
+      "description": "Access DCS API (kiosk network)"
+    },
+    {
+      "source": "INITIAL_STATE",
+      "target": "ASSET_BHS_API",
+      "weight": 0.053333333333333344,
+      "exploitability": 0.8,
+      "impact": 0.1,
+      "time_estimate": 0.5,
+      "stealth": 0.7,
+      "description": "Discover BHS on flat network"
+    },
+    {
+      "source": "INITIAL_STATE",
+      "target": "VULN_DCS_INFO_DISC",
+      "weight": 0.12666666666666668,
+      "exploitability": 0.95,
+      "impact": 0.2,
+      "time_estimate": 0.5,
+      "stealth": 1.0,
+      "description": "Access /api/system (no auth)"
+    },
+    {
+      "source": "INITIAL_STATE",
+      "target": "VULN_FIDS_DEFAULT_CREDS",
+      "weight": 0.1425,
+      "exploitability": 0.95,
+      "impact": 0.3,
+      "time_estimate": 1.0,
+      "stealth": 0.8,
+      "description": "Try FIDS admin defaults"
+    },
+    {
+      "source": "INITIAL_STATE",
+      "target": "VULN_REDIS_NO_AUTH",
+      "weight": 0.1275,
+      "exploitability": 0.85,
+      "impact": 0.3,
+      "time_estimate": 1.0,
+      "stealth": 0.6,
+      "description": "Discover Redis (port scan)"
+    },
+    {
+      "source": "INITIAL_STATE",
+      "target": "VULN_BHS_DEFAULT_CREDS",
+      "weight": 0.136,
+      "exploitability": 0.85,
+      "impact": 0.4,
+      "time_estimate": 1.5,
+      "stealth": 0.5,
+      "description": "Discover BHS PostgreSQL 5433"
+    },
+    {
+      "source": "INITIAL_STATE",
+      "target": "VULN_FIDS_NO_SESSION",
+      "weight": 0.06,
+      "exploitability": 0.6,
+      "impact": 0.3,
+      "time_estimate": 2.0,
+      "stealth": 0.5,
+      "description": "Discover admin panel URL"
+    },
+    {
+      "source": "VULN_BOOKING_SQLI",
+      "target": "ASSET_BOOKING_DB",
+      "weight": 0.21,
+      "exploitability": 0.9,
+      "impact": 0.7,
+      "time_estimate": 2.0,
+      "stealth": 0.4,
+      "description": "Extract booking DB via SQLi"
+    },
+    {
+      "source": "VULN_BOOKING_IDOR",
+      "target": "ASSET_BOOKING_DB",
+      "weight": 0.325,
+      "exploitability": 1.0,
+      "impact": 0.65,
+      "time_estimate": 1.0,
+      "stealth": 0.6,
+      "description": "Exfiltrate PII via IDOR"
+    },
+    {
+      "source": "VULN_BOOKING_INFO_DISC",
+      "target": "VULN_BOOKING_SQLI",
+      "weight": 0.006666666666666668,
+      "exploitability": 0.1,
+      "impact": 0.1,
+      "time_estimate": 0.5,
+      "stealth": 0.9,
+      "description": "Schema info aids SQLi"
+    },
+    {
+      "source": "VULN_DCS_SQLI",
+      "target": "ASSET_DCS_DATABASE",
+      "weight": 0.255,
+      "exploitability": 0.9,
+      "impact": 0.85,
+      "time_estimate": 2.0,
+      "stealth": 0.3,
+      "description": "Extract DCS DB via SQLi"
+    },
+    {
+      "source": "VULN_DCS_JWT",
+      "target": "ASSET_DCS_ADMIN",
+      "weight": 0.45125,
+      "exploitability": 0.95,
+      "impact": 0.95,
+      "time_estimate": 1.0,
+      "stealth": 0.3,
+      "description": "Forge admin JWT token"
+    },
+    {
+      "source": "VULN_DCS_JWT",
+      "target": "ASSET_BOARDING_PASS_FORGERY",
+      "weight": 0.31666666666666665,
+      "exploitability": 0.95,
+      "impact": 1.0,
+      "time_estimate": 2.0,
+      "stealth": 0.2,
+      "description": "Forge boarding pass JWTs"
+    },
+    {
+      "source": "VULN_DCS_MASS_ASSIGN",
+      "target": "ASSET_DCS_DATABASE",
+      "weight": 0.255,
+      "exploitability": 0.85,
+      "impact": 0.6,
+      "time_estimate": 1.0,
+      "stealth": 0.5,
+      "description": "Override travel_class/seat"
+    },
+    {
+      "source": "VULN_DCS_IDOR",
+      "target": "ASSET_PASSENGER_MANIFEST",
+      "weight": 0.45,
+      "exploitability": 1.0,
+      "impact": 0.9,
+      "time_estimate": 1.0,
+      "stealth": 0.5,
+      "description": "Access manifests via bookings"
+    },
+    {
+      "source": "VULN_DCS_WEAK_CREDS",
+      "target": "ASSET_DCS_CHECKIN",
+      "weight": 0.4666666666666666,
+      "exploitability": 1.0,
+      "impact": 0.7,
+      "time_estimate": 0.5,
+      "stealth": 0.6,
+      "description": "Login as operator"
+    },
+    {
+      "source": "VULN_DCS_WEAK_CREDS",
+      "target": "ASSET_DCS_ADMIN",
+      "weight": 0.34199999999999997,
+      "exploitability": 0.9,
+      "impact": 0.95,
+      "time_estimate": 1.5,
+      "stealth": 0.5,
+      "description": "Login as admin"
+    },
+    {
+      "source": "VULN_DCS_WEAK_CREDS",
+      "target": "VULN_DCS_NO_RBAC",
+      "weight": 0.3,
+      "exploitability": 0.9,
+      "impact": 0.5,
+      "time_estimate": 0.5,
+      "stealth": 0.7,
+      "description": "Login as kiosk, discover manifest"
+    },
+    {
+      "source": "VULN_DCS_INFO_DISC",
+      "target": "VULN_REDIS_NO_AUTH",
+      "weight": 0.18000000000000002,
+      "exploitability": 0.9,
+      "impact": 0.4,
+      "time_estimate": 1.0,
+      "stealth": 0.8,
+      "description": "Extract Redis host from /api/system"
+    },
+    {
+      "source": "VULN_DCS_NO_RBAC",
+      "target": "ASSET_PASSENGER_MANIFEST",
+      "weight": 0.6,
+      "exploitability": 1.0,
+      "impact": 0.9,
+      "time_estimate": 0.5,
+      "stealth": 0.6,
+      "description": "Kiosk views full manifest"
+    },
+    {
+      "source": "VULN_FIDS_SQLI",
+      "target": "ASSET_FIDS_DB",
+      "weight": 0.18000000000000002,
+      "exploitability": 0.9,
+      "impact": 0.6,
+      "time_estimate": 2.0,
+      "stealth": 0.3,
+      "description": "Extract FIDS cache DB"
+    },
+    {
+      "source": "VULN_FIDS_DEFAULT_CREDS",
+      "target": "ASSET_FIDS_ADMIN",
+      "weight": 0.5666666666666667,
+      "exploitability": 1.0,
+      "impact": 0.85,
+      "time_estimate": 0.5,
+      "stealth": 0.6,
+      "description": "Login FIDS admin/admin"
+    },
+    {
+      "source": "VULN_FIDS_INFO_DISC",
+      "target": "ASSET_DCS_API",
+      "weight": 0.049999999999999996,
+      "exploitability": 0.6,
+      "impact": 0.5,
+      "time_estimate": 5.0,
+      "stealth": 0.5,
+      "description": "FIDS admin reveals DCS URL"
+    },
+    {
+      "source": "VULN_FIDS_NO_SESSION",
+      "target": "ASSET_FIDS_ADMIN",
+      "weight": 0.27999999999999997,
+      "exploitability": 0.7,
+      "impact": 0.8,
+      "time_estimate": 1.0,
+      "stealth": 0.4,
+      "description": "Direct URL admin access"
+    },
+    {
+      "source": "VULN_BHS_CMD_INJECTION",
+      "target": "ASSET_BHS_RCE",
+      "weight": 0.31666666666666665,
+      "exploitability": 0.95,
+      "impact": 1.0,
+      "time_estimate": 2.0,
+      "stealth": 0.2,
+      "description": "Achieve RCE on BHS"
+    },
+    {
+      "source": "VULN_BHS_DEFAULT_CREDS",
+      "target": "ASSET_BHS_DATABASE",
+      "weight": 0.5333333333333333,
+      "exploitability": 1.0,
+      "impact": 0.8,
+      "time_estimate": 0.5,
+      "stealth": 0.4,
+      "description": "Connect with default creds"
+    },
+    {
+      "source": "VULN_BHS_NO_AUTH",
+      "target": "VULN_BHS_CONFIG_EXPOSURE",
+      "weight": 0.3333333333333333,
+      "exploitability": 1.0,
+      "impact": 0.5,
+      "time_estimate": 0.5,
+      "stealth": 0.7,
+      "description": "Query /api/maintenance/config"
+    },
+    {
+      "source": "VULN_BHS_NO_AUTH",
+      "target": "VULN_BHS_CMD_INJECTION",
+      "weight": 0.135,
+      "exploitability": 0.9,
+      "impact": 0.6,
+      "time_estimate": 3.0,
+      "stealth": 0.3,
+      "description": "Inject cmd in diagnostic"
+    },
+    {
+      "source": "VULN_BHS_CONFIG_EXPOSURE",
+      "target": "ASSET_BHS_CONFIG",
+      "weight": 0.5,
+      "exploitability": 1.0,
+      "impact": 0.75,
+      "time_estimate": 0.5,
+      "stealth": 0.6,
+      "description": "Extract API keys, endpoints"
+    },
+    {
+      "source": "VULN_REDIS_NO_AUTH",
+      "target": "ASSET_REDIS_ACCESS",
+      "weight": 0.5666666666666667,
+      "exploitability": 1.0,
+      "impact": 0.85,
+      "time_estimate": 0.5,
+      "stealth": 0.5,
+      "description": "Connect to unauth Redis"
+    },
+    {
+      "source": "ASSET_BOOKING_WEB",
+      "target": "VULN_BOOKING_SQLI",
+      "weight": 0.05666666666666667,
+      "exploitability": 0.85,
+      "impact": 0.4,
+      "time_estimate": 5.0,
+      "stealth": 0.5,
+      "description": "Craft SQLi on booking lookup"
+    },
+    {
+      "source": "ASSET_BOOKING_WEB",
+      "target": "VULN_BOOKING_IDOR",
+      "weight": 0.09499999999999999,
+      "exploitability": 0.95,
+      "impact": 0.3,
+      "time_estimate": 2.0,
+      "stealth": 0.7,
+      "description": "Enumerate sequential booking IDs"
+    },
+    {
+      "source": "ASSET_BOOKING_WEB",
+      "target": "VULN_BOOKING_INFO_DISC",
+      "weight": 0.09499999999999999,
+      "exploitability": 0.95,
+      "impact": 0.15,
+      "time_estimate": 0.5,
+      "stealth": 0.9,
+      "description": "Trigger DB error messages"
+    },
+    {
+      "source": "ASSET_BOOKING_DB",
+      "target": "ASSET_DCS_API",
+      "weight": 0.06999999999999999,
+      "exploitability": 0.7,
+      "impact": 0.6,
+      "time_estimate": 5.0,
+      "stealth": 0.4,
+      "description": "Booking creds pivot to DCS"
+    },
+    {
+      "source": "ASSET_DCS_API",
+      "target": "VULN_DCS_WEAK_CREDS",
+      "weight": 0.2375,
+      "exploitability": 0.95,
+      "impact": 0.5,
+      "time_estimate": 1.0,
+      "stealth": 0.7,
+      "description": "Try default creds admin/admin123"
+    },
+    {
+      "source": "ASSET_DCS_API",
+      "target": "VULN_DCS_JWT",
+      "weight": 0.10625,
+      "exploitability": 0.85,
+      "impact": 0.5,
+      "time_estimate": 3.0,
+      "stealth": 0.4,
+      "description": "Discover JWT alg:none vuln"
+    },
+    {
+      "source": "ASSET_DCS_CHECKIN",
+      "target": "VULN_DCS_MASS_ASSIGN",
+      "weight": 0.10000000000000002,
+      "exploitability": 0.75,
+      "impact": 0.4,
+      "time_estimate": 2.0,
+      "stealth": 0.6,
+      "description": "Craft check-in with extra fields"
+    },
+    {
+      "source": "ASSET_DCS_CHECKIN",
+      "target": "VULN_DCS_IDOR",
+      "weight": 0.2375,
+      "exploitability": 0.95,
+      "impact": 0.5,
+      "time_estimate": 1.0,
+      "stealth": 0.7,
+      "description": "Enumerate booking refs"
+    },
+    {
+      "source": "ASSET_DCS_CHECKIN",
+      "target": "VULN_DCS_SQLI",
+      "weight": 0.05666666666666667,
+      "exploitability": 0.85,
+      "impact": 0.4,
+      "time_estimate": 5.0,
+      "stealth": 0.4,
+      "description": "SQLi on passenger search"
+    },
+    {
+      "source": "ASSET_DCS_DATABASE",
+      "target": "ASSET_PASSENGER_MANIFEST",
+      "weight": 0.6333333333333333,
+      "exploitability": 1.0,
+      "impact": 0.95,
+      "time_estimate": 0.5,
+      "stealth": 0.5,
+      "description": "Query manifests from DB"
+    },
+    {
+      "source": "ASSET_DCS_DATABASE",
+      "target": "ASSET_PII_EXFILTRATION",
+      "weight": 0.5,
+      "exploitability": 1.0,
+      "impact": 1.0,
+      "time_estimate": 1.0,
+      "stealth": 0.2,
+      "description": "Bulk extract PII (GDPR breach)"
+    },
+    {
+      "source": "ASSET_DCS_DATABASE",
+      "target": "ASSET_BHS_API",
+      "weight": 0.13999999999999999,
+      "exploitability": 0.8,
+      "impact": 0.7,
+      "time_estimate": 3.0,
+      "stealth": 0.4,
+      "description": "DCS config reveals BHS endpoint"
+    },
+    {
+      "source": "ASSET_DCS_ADMIN",
+      "target": "ASSET_DCS_DATABASE",
+      "weight": 0.6333333333333333,
+      "exploitability": 1.0,
+      "impact": 0.95,
+      "time_estimate": 0.5,
+      "stealth": 0.5,
+      "description": "Admin full DB access"
+    },
+    {
+      "source": "ASSET_DCS_ADMIN",
+      "target": "ASSET_PASSENGER_MANIFEST",
+      "weight": 0.6333333333333333,
+      "exploitability": 1.0,
+      "impact": 0.95,
+      "time_estimate": 0.5,
+      "stealth": 0.4,
+      "description": "Admin views all manifests"
+    },
+    {
+      "source": "ASSET_DCS_ADMIN",
+      "target": "ASSET_FIDS_ADMIN",
+      "weight": 0.22666666666666668,
+      "exploitability": 0.85,
+      "impact": 0.8,
+      "time_estimate": 2.0,
+      "stealth": 0.4,
+      "description": "DCS admin pivots to FIDS via Redis"
+    },
+    {
+      "source": "ASSET_FIDS_DISPLAY",
+      "target": "VULN_FIDS_XSS",
+      "weight": 0.01909090909090909,
+      "exploitability": 0.7,
+      "impact": 0.3,
+      "time_estimate": 10.0,
+      "stealth": 0.3,
+      "description": "XSS via manipulated flight status"
+    },
+    {
+      "source": "ASSET_FIDS_ADMIN",
+      "target": "ASSET_FIDS_DB",
+      "weight": 0.27,
+      "exploitability": 0.9,
+      "impact": 0.6,
+      "time_estimate": 1.0,
+      "stealth": 0.5,
+      "description": "Access flight cache via admin"
+    },
+    {
+      "source": "ASSET_FIDS_ADMIN",
+      "target": "VULN_FIDS_SQLI",
+      "weight": 0.085,
+      "exploitability": 0.85,
+      "impact": 0.4,
+      "time_estimate": 3.0,
+      "stealth": 0.4,
+      "description": "SQLi via admin search"
+    },
+    {
+      "source": "ASSET_FIDS_ADMIN",
+      "target": "VULN_FIDS_INFO_DISC",
+      "weight": 0.19999999999999998,
+      "exploitability": 1.0,
+      "impact": 0.3,
+      "time_estimate": 0.5,
+      "stealth": 0.8,
+      "description": "View system config in admin"
+    },
+    {
+      "source": "ASSET_BHS_API",
+      "target": "VULN_BHS_NO_AUTH",
+      "weight": 0.19999999999999998,
+      "exploitability": 1.0,
+      "impact": 0.3,
+      "time_estimate": 0.5,
+      "stealth": 0.8,
+      "description": "Access unauth BHS endpoints"
+    },
+    {
+      "source": "ASSET_BHS_DATABASE",
+      "target": "ASSET_PII_EXFILTRATION",
+      "weight": 0.24000000000000002,
+      "exploitability": 0.9,
+      "impact": 0.8,
+      "time_estimate": 2.0,
+      "stealth": 0.3,
+      "description": "Extract bag-passenger PII"
+    },
+    {
+      "source": "ASSET_BHS_RCE",
+      "target": "ASSET_NETWORK_PIVOT",
+      "weight": 0.285,
+      "exploitability": 0.9,
+      "impact": 0.95,
+      "time_estimate": 2.0,
+      "stealth": 0.2,
+      "description": "BHS shell enables network scan"
+    },
+    {
+      "source": "ASSET_BHS_CONFIG",
+      "target": "ASSET_DCS_API",
+      "weight": 0.105,
+      "exploitability": 0.7,
+      "impact": 0.6,
+      "time_estimate": 3.0,
+      "stealth": 0.4,
+      "description": "BHS config reveals DCS + API key"
+    },
+    {
+      "source": "ASSET_REDIS_ACCESS",
+      "target": "ASSET_FIDS_DISPLAY",
+      "weight": 0.4275,
+      "exploitability": 0.95,
+      "impact": 0.9,
+      "time_estimate": 1.0,
+      "stealth": 0.3,
+      "description": "Publish false flight data"
+    },
+    {
+      "source": "ASSET_REDIS_ACCESS",
+      "target": "ASSET_BHS_API",
+      "weight": 0.40375,
+      "exploitability": 0.95,
+      "impact": 0.85,
+      "time_estimate": 1.0,
+      "stealth": 0.3,
+      "description": "Publish false bag routing"
+    },
+    {
+      "source": "ASSET_NETWORK_PIVOT",
+      "target": "ASSET_DCS_DATABASE",
+      "weight": 0.105,
+      "exploitability": 0.7,
+      "impact": 0.9,
+      "time_estimate": 5.0,
+      "stealth": 0.2,
+      "description": "Pivot from BHS to DCS DB"
+    }
+  ]
+}
