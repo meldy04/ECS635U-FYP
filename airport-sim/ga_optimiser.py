@@ -43,6 +43,9 @@ class AttackPathOptimiser:
         # Find all valid paths to all targets
         self.all_paths = self._enumerate_all_paths()
 
+        # Compute time bounds across all paths for normalisation
+        self._compute_time_bounds()
+
         self._configure_ga_parameters()
         self._setup_deap()
 
@@ -130,6 +133,32 @@ class AttackPathOptimiser:
 
         return all_paths
 
+    def _compute_time_bounds(self):
+        """Compute min/max time across all paths for normalisation to [0,1]."""
+        all_times = []
+        for path, target_id, target_crit in self.all_paths:
+            path_time = 0.0
+            for i in range(len(path) - 1):
+                try:
+                    edge = self.graph[path[i]][path[i + 1]]
+                    path_time += edge.get('time_estimate', 10.0)
+                except (KeyError, IndexError):
+                    path_time += 15.0
+            all_times.append(path_time)
+
+        if all_times:
+            self.time_min = min(all_times)
+            self.time_max = max(all_times)
+        else:
+            self.time_min = 0.0
+            self.time_max = 1.0
+
+        if self.time_max == self.time_min:
+            self.time_max = self.time_min + 1.0
+
+        print(
+            f"[+] Time range: {self.time_min:.1f} - {self.time_max:.1f} min (normalised to [0,1])")
+
     def _configure_ga_parameters(self):
         path_count = len(self.all_paths)
 
@@ -189,7 +218,7 @@ class AttackPathOptimiser:
         path_index = individual[0]
 
         if not self.all_paths or path_index >= len(self.all_paths):
-            return (0.0, 0.0, 1000.0, 0.0)
+            return (0.0, 0.0, 1.0, 0.0)
 
         path, target_id, target_criticality = self.all_paths[path_index]
 
@@ -215,18 +244,20 @@ class AttackPathOptimiser:
         exploitability = min(
             exploitability_scores) if exploitability_scores else 0.0
 
-        # Impact: product of edge impacts * target criticality
-        impact = np.prod(impact_scores) * \
+        # Impact: geometric mean of edge impacts * target criticality
+        n_edges = len(impact_scores)
+        impact = (np.prod(impact_scores) ** (1.0 / n_edges)) * \
             target_criticality if impact_scores else 0.0
 
-        # Time: sum of all steps
+        # Time: sum of all steps, normalised to [0,1]
         total_time = sum(time_estimates)
+        normalised_time = (total_time - self.time_min) / \
+            (self.time_max - self.time_min)
 
-        # Stealth: average stealth weighted by inverse path length
-        avg_stealth = np.mean(stealth_scores) if stealth_scores else 0.0
-        stealth = avg_stealth * (1.0 / len(path)) if len(path) > 1 else 0.0
+        # Stealth: average stealth along path
+        stealth = np.mean(stealth_scores) if stealth_scores else 0.0
 
-        return (exploitability, impact, total_time, stealth)
+        return (exploitability, impact, normalised_time, stealth)
 
     def _crossover(self, ind1, ind2):
         if random.random() < 0.5:
@@ -253,10 +284,16 @@ class AttackPathOptimiser:
         for ind, fit in zip(population, fitnesses):
             ind.fitness.values = fit
 
+        # Prime population with NSGA-II ranks and crowding distance
+        population = self.toolbox.select(population, len(population))
+
         start_time = time.time()
 
+        fitness_weights = (1.0, 1.0, -1.0, 1.0)
+
         for gen in range(1, self.generations + 1):
-            offspring = self.toolbox.select(population, len(population))
+            # Parent selection using tournament with crowding distance
+            offspring = tools.selTournamentDCD(population, len(population))
             offspring = list(map(self.toolbox.clone, offspring))
 
             for child1, child2 in zip(offspring[::2], offspring[1::2]):
@@ -276,24 +313,33 @@ class AttackPathOptimiser:
                 for ind, fit in zip(invalid_ind, fitnesses):
                     ind.fitness.values = fit
 
-            population[:] = offspring
+            # NSGA-II survival selection: combine parents + offspring, select best
+            combined_pop = population + offspring
+            population[:] = self.toolbox.select(
+                combined_pop, self.population_size)
 
+            # Track evolution with weighted fitness
             fits = [ind.fitness.values for ind in population if ind.fitness.valid]
             if fits:
-                best_fit = max(fits, key=lambda x: sum(x))
+                best_fit = max(fits, key=lambda x: sum(
+                    w * v for w, v in zip(fitness_weights, x)))
+                weighted_best = sum(
+                    w * v for w, v in zip(fitness_weights, best_fit))
                 avg_fit = [sum(f[i] for f in fits) / len(fits)
                            for i in range(4)]
+                weighted_avg = sum(
+                    w * v for w, v in zip(fitness_weights, avg_fit))
                 diversity = len(
                     set(ind[0] for ind in population)) / max(1, len(self.all_paths))
 
                 self.evolution_stats['generations'].append(gen)
-                self.evolution_stats['best_fitness'].append(sum(best_fit))
-                self.evolution_stats['avg_fitness'].append(sum(avg_fit))
+                self.evolution_stats['best_fitness'].append(weighted_best)
+                self.evolution_stats['avg_fitness'].append(weighted_avg)
                 self.evolution_stats['diversity'].append(diversity)
 
                 if gen % 10 == 0 or gen == 1:
-                    print(f"  Gen {gen}/{self.generations} | Best: {sum(best_fit):.3f} | "
-                          f"Avg: {sum(avg_fit):.3f} | Diversity: {diversity:.1%}")
+                    print(f"  Gen {gen}/{self.generations} | Best: {weighted_best:.3f} | "
+                          f"Avg: {weighted_avg:.3f} | Diversity: {diversity:.1%}")
 
         elapsed = time.time() - start_time
         print(f"\n[+] Complete in {elapsed:.2f}s")
@@ -318,6 +364,10 @@ class AttackPathOptimiser:
             path, target_id, target_crit = self.all_paths[idx]
             fitness = ind.fitness.values
 
+            # Convert normalised time back to raw minutes for readability
+            raw_time = fitness[2] * \
+                (self.time_max - self.time_min) + self.time_min
+
             optimised_paths.append({
                 'path_index': idx,
                 'path': path,
@@ -327,10 +377,11 @@ class AttackPathOptimiser:
                 'fitness': {
                     'exploitability': round(fitness[0], 3),
                     'impact': round(fitness[1], 3),
-                    'time': round(fitness[2], 1),
+                    'time_normalised': round(fitness[2], 3),
+                    'time_minutes': round(raw_time, 1),
                     'stealth': round(fitness[3], 3)
                 },
-                'total_fitness': round(sum(fitness), 3),
+                'total_fitness': round(sum(w * v for w, v in zip((1.0, 1.0, -1.0, 1.0), fitness)), 3),
                 'description': self._describe_path(path)
             })
 
@@ -442,7 +493,7 @@ def main():
         print(f"  Total Fitness: {p['total_fitness']:.3f}")
         print(f"  Exploitability: {p['fitness']['exploitability']:.2f} | "
               f"Impact: {p['fitness']['impact']:.2f} | "
-              f"Time: {p['fitness']['time']:.1f}min | "
+              f"Time: {p['fitness']['time_minutes']:.1f}min | "
               f"Stealth: {p['fitness']['stealth']:.3f}")
         print(f"  Hops: {p['path_length']}")
         print(f"  Route: {' -> '.join(p['path'])}")
