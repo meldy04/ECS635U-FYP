@@ -468,6 +468,8 @@ class AttackPathOptimiser:
 
 
 def main():
+    random.seed(42)
+    np.random.seed(42)
     print("=" * 60)
     print("GA Attack Path Optimiser")
     print("=" * 60 + "\n")
