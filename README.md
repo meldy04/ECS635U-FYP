@@ -1,4 +1,4 @@
-# AI Assisted Attack Path Prioritisation for Airport IT Assets
+# AI-Assisted Attack Path Prioritisation for Airport IT Assets
 Final Year Project - BSc Computer Science, Queen Mary University of London (2025/26)
 
 ## PROJECT AIMS
