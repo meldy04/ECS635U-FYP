@@ -504,6 +504,19 @@ def main():
     print("\n" + "=" * 60)
     optimiser.visualise_evolution()
     optimiser.export_results(optimised_paths)
+    if optimised_paths:
+        from attack_graph_generator import AttackGraphGenerator
+        viz = AttackGraphGenerator('attack_graph_data.json')
+        viz.add_initial_state()
+        viz.add_vulnerability_nodes()
+        assets = viz.add_asset_nodes()
+        viz.build_exploit_chains('INITIAL_STATE',
+                                 [n for n in viz.graph.nodes()
+                                  if viz.graph.nodes[n].get('type') == 'vulnerability'],
+                                 assets)
+        top_path = optimised_paths[0]['path']
+        viz.visualise_ga_path(top_path, 'attack_graph_ga_path.png',
+                              'GA Top-Ranked Attack Path')
     print("\n" + "=" * 60)
     print("GA Optimisation Complete")
     print("=" * 60)

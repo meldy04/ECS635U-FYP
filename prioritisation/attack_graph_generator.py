@@ -601,14 +601,8 @@ def main():
     m = g.calculate_path_metrics()
     print(
         f"\n  Nodes: {m['total_nodes']} | Edges: {m['total_edges']} | Density: {m['density']:.3f}")
-    critical_paths = g.identify_critical_paths()
+    g.identify_critical_paths()
     g.visualise_graph('attack_graph.png')
-
-    if critical_paths and len(critical_paths) > 0:
-        top_path = critical_paths[0]['path']
-        g.visualise_ga_path(top_path, 'attack_graph_ga_path.png',
-                            'Top-Ranked Attack Path')
-
     g.export_graph()
     print("\n"+"="*60+"\nComplete!\n"+"="*60)
 
