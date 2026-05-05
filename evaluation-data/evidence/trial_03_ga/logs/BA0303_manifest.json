@@ -1,0 +1,30 @@
+{
+    "flight": "BA0303",
+    "passenger_count": 2,
+    "manifest": [
+        {
+            "first_name": "Lucas",
+            "last_name": "Dubois",
+            "passport_number": "FR667788990",
+            "nationality": "French",
+            "reference": "KLMN7890",
+            "seat_number": null,
+            "travel_class": "business",
+            "booking_status": "confirmed",
+            "boarding_group": null,
+            "barcode_data": null
+        },
+        {
+            "first_name": "Ahmed",
+            "last_name": "Hassan",
+            "passport_number": "GB456789123",
+            "nationality": "British",
+            "reference": "IJKL9012",
+            "seat_number": null,
+            "travel_class": "economy",
+            "booking_status": "confirmed",
+            "boarding_group": null,
+            "barcode_data": null
+        }
+    ]
+}

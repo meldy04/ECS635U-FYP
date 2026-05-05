@@ -1,0 +1,30 @@
+{
+    "flight": "LH0901",
+    "passenger_count": 2,
+    "manifest": [
+        {
+            "first_name": "Yuki",
+            "last_name": "Tanaka",
+            "passport_number": "JP554433221",
+            "nationality": "Japanese",
+            "reference": "UVWX1234",
+            "seat_number": "12A",
+            "travel_class": "economy",
+            "booking_status": "checked_in",
+            "boarding_group": "B",
+            "barcode_data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder_token_1"
+        },
+        {
+            "first_name": "Olivia",
+            "last_name": "Brown",
+            "passport_number": "GB111222333",
+            "nationality": "British",
+            "reference": "YZAB5678",
+            "seat_number": "14C",
+            "travel_class": "economy",
+            "booking_status": "checked_in",
+            "boarding_group": "C",
+            "barcode_data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder_token_2"
+        }
+    ]
+}

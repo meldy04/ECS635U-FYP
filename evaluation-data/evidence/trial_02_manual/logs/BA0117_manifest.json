@@ -1,0 +1,42 @@
+{
+    "flight": "BA0117",
+    "passenger_count": 3,
+    "manifest": [
+        {
+            "first_name": "Sarah",
+            "last_name": "Chen",
+            "passport_number": "GB987654321",
+            "nationality": "British",
+            "reference": "EFGH5678",
+            "seat_number": null,
+            "travel_class": "economy",
+            "booking_status": "confirmed",
+            "boarding_group": null,
+            "barcode_data": null
+        },
+        {
+            "first_name": "David",
+            "last_name": "Okonkwo",
+            "passport_number": "NG445566778",
+            "nationality": "Nigerian",
+            "reference": "CDEF9012",
+            "seat_number": null,
+            "travel_class": "first",
+            "booking_status": "confirmed",
+            "boarding_group": null,
+            "barcode_data": null
+        },
+        {
+            "first_name": "James",
+            "last_name": "Wilson",
+            "passport_number": "GB123456789",
+            "nationality": "British",
+            "reference": "ABCD1234",
+            "seat_number": null,
+            "travel_class": "business",
+            "booking_status": "confirmed",
+            "boarding_group": null,
+            "barcode_data": null
+        }
+    ]
+}
