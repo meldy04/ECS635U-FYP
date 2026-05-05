@@ -38,7 +38,7 @@ docker compose down && docker compose up -d --build
 From the project root:
 ```bash
 pip install -r requirements.txt
-cd airport-sim
+cd prioritisation
 python attack_graph_generator.py
 python ga_optimiser.py
 ```
