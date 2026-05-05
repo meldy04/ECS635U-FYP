@@ -186,7 +186,7 @@ def covered_targets(rows, order, n=5):
 # Main
 # ---------------------------------------------------------------------------
 def main():
-    data, G = load_graph('../airport-sim/attack_graph.json')
+    data, G = load_graph('../prioritisation/attack_graph.json')
     print(
         f"[+] Graph loaded: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges")
 

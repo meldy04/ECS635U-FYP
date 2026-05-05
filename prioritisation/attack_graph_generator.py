@@ -9,8 +9,10 @@ Output: attack_graph.json, attack_graph.png
 import json
 import networkx as nx
 import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import Patch
+from matplotlib.lines import Line2D
 from datetime import datetime
-from typing import Dict, List, Any
 from collections import defaultdict
 
 
@@ -259,33 +261,323 @@ class AttackGraphGenerator:
             print(f"    {' -> '.join(p['path'])}")
         return all_scores[:top_n]
 
+    def _layered_positions(self, graph, source='INITIAL_STATE'):
+        """
+        x-coordinates = exploitation depth (BFS distance from initial state)
+        y-coordinates = system grouping, keeping related systems clustered verically
+        """
+        try:
+            depths = nx.single_source_shortest_path_length(graph, source)
+        except nx.NetworkXError:
+            depths = {n: 0 for n in graph.nodes()}
+
+        max_depth = max(depths.values()) if depths else 0
+        for n in graph.nodes():
+            if n not in depths:
+                depths[n] = max_depth + 1
+
+        by_depth = {}
+        for n, d in depths.items():
+            by_depth.setdefault(d, []).append(n)
+
+        system_order = {
+            'external': 0, 'booking': 1, 'dcs': 2, 'fids': 3,
+            'bhs': 4, 'redis': 5, 'network': 6, 'unknown': 7
+        }
+
+        pos = {}
+        for d, nodes in by_depth.items():
+            nodes_sorted = sorted(
+                nodes,
+                key=lambda n: (system_order.get(
+                    graph.nodes[n].get('system', 'unknown'), 99), n)
+            )
+            n_count = len(nodes_sorted)
+            # Spread vertically across [-1, 1] leaving margin
+            if n_count == 1:
+                ys = [0.0]
+            else:
+                ys = list(np.linspace(1.0, -1.0, n_count))
+            for n, y in zip(nodes_sorted, ys):
+                pos[n] = (d * 1.6, y)
+        return pos
+
+    def _short_label(self, graph, node):
+        """Trim longer node labels for display"""
+        label = graph.nodes[node].get('label', node)
+        if '(' in label and graph.nodes[node].get('type') == 'vulnerability':
+            label = label.split('(')[0].strip()
+        if len(label) > 24:
+            label = label[:22] + '..'
+        return label
+
     def visualise_graph(self, output_file='attack_graph.png'):
+        """
+        Hierarchical attack graph visualisation.
+        - x-axis = attack depth
+        - Node shape = node type (diamond=initial, circle=vulnerability, square=asset)
+        - Node colour = system
+        """
         if not self.graph.number_of_nodes():
             return
-        plt.figure(figsize=(20, 14))
-        pos = nx.spring_layout(self.graph, k=2.5, iterations=100, seed=42)
-        colors = {'external': '#2ecc71', 'booking': '#3498db', 'dcs': '#e74c3c',
-                  'fids': '#f39c12', 'bhs': '#9b59b6', 'redis': '#1abc9c', 'network': '#95a5a6'}
-        for s, c in colors.items():
-            nodes = [n for n, d in self.graph.nodes(
-                data=True) if d.get('system') == s]
-            if nodes:
-                sizes = [2500 if self.graph.nodes[n].get('type') == 'initial_state' else 2000 if self.graph.nodes[n].get(
-                    'type') == 'asset' else 1200 for n in nodes]
-                nx.draw_networkx_nodes(self.graph, pos, nodelist=nodes, node_color=c,
-                                       node_size=sizes, label=s.upper(), edgecolors='black', linewidths=1.5)
-        ew = [self.graph[u][v]['weight']*2.5 for u, v in self.graph.edges()]
-        nx.draw_networkx_edges(self.graph, pos, width=ew, alpha=0.6, edge_color='#555',
-                               arrows=True, arrowsize=20, connectionstyle='arc3,rad=0.1')
-        labels = {n: (self.graph.nodes[n].get('label', n)[:22]+'...' if len(self.graph.nodes[n].get(
-            'label', n)) > 25 else self.graph.nodes[n].get('label', n)) for n in self.graph.nodes()}
-        nx.draw_networkx_labels(self.graph, pos, labels,
-                                font_size=7, font_weight='bold')
-        plt.title("Airport IT Simulation - Attack Graph\nHub-and-Spoke (DCS Central)",
-                  fontsize=16, fontweight='bold')
-        plt.legend(loc='upper left', fontsize=7, labelspacing=1.2,
-                   framealpha=0.9, markerscale=0.6)
-        plt.savefig(output_file, dpi=300, bbox_inches='tight')
+
+        fig, ax = plt.subplots(figsize=(20, 12))
+        pos = self._layered_positions(self.graph)
+
+        system_colors = {
+            'external': '#27ae60', 'booking': '#3498db', 'dcs': '#e74c3c',
+            'fids': '#f39c12', 'bhs': '#9b59b6', 'redis': '#16a085',
+            'network': '#7f8c8d', 'unknown': '#bdc3c7'
+        }
+
+        # Edges
+        edge_alpha = 0.35
+        nx.draw_networkx_edges(
+            self.graph, pos, ax=ax,
+            edge_color='#2c3e50', width=0.9, alpha=edge_alpha,
+            arrows=True, arrowsize=10, arrowstyle='-|>',
+            connectionstyle='arc3,rad=0.08',
+            node_size=900,
+        )
+
+        # Nodes by type and system
+        type_shape = {'initial_state': 'D', 'asset': 's', 'vulnerability': 'o'}
+        type_size = {'initial_state': 1100, 'asset': 950, 'vulnerability': 600}
+
+        for ntype, shape in type_shape.items():
+            for syst, color in system_colors.items():
+                nodes = [
+                    n for n, d in self.graph.nodes(data=True)
+                    if d.get('type') == ntype and d.get('system') == syst
+                ]
+                if not nodes:
+                    continue
+                nx.draw_networkx_nodes(
+                    self.graph, pos, ax=ax, nodelist=nodes,
+                    node_shape=shape, node_color=color,
+                    node_size=type_size[ntype],
+                    edgecolors='black', linewidths=1.2,
+                )
+
+        # Labels below nodes
+        label_pos = {n: (x, y - 0.09) for n, (x, y) in pos.items()}
+        labels = {n: self._short_label(self.graph, n)
+                  for n in self.graph.nodes()}
+        nx.draw_networkx_labels(
+            self.graph, label_pos, labels=labels, ax=ax,
+            font_size=6.5, font_weight='normal',
+        )
+
+        # Two-dimensional legend
+        type_legend = [
+            Line2D([0], [0], marker='D', color='w', markerfacecolor='#7f8c8d',
+                   markersize=11, markeredgecolor='black', label='Initial State'),
+            Line2D([0], [0], marker='o', color='w', markerfacecolor='#7f8c8d',
+                   markersize=10, markeredgecolor='black', label='Vulnerability'),
+            Line2D([0], [0], marker='s', color='w', markerfacecolor='#7f8c8d',
+                   markersize=11, markeredgecolor='black', label='Asset'),
+        ]
+        color_legend = [
+            Patch(facecolor=system_colors['booking'],
+                  edgecolor='black', label='Booking'),
+            Patch(facecolor=system_colors['dcs'],
+                  edgecolor='black', label='DCS (hub)'),
+            Patch(facecolor=system_colors['fids'],
+                  edgecolor='black', label='FIDS'),
+            Patch(facecolor=system_colors['bhs'],
+                  edgecolor='black', label='BHS'),
+            Patch(facecolor=system_colors['redis'],
+                  edgecolor='black', label='Redis'),
+            Patch(facecolor=system_colors['network'],
+                  edgecolor='black', label='Network'),
+        ]
+
+        leg1 = ax.legend(handles=type_legend, loc='upper left',
+                         title='Node Type', fontsize=9, title_fontsize=10,
+                         framealpha=0.95)
+        ax.add_artist(leg1)
+        ax.legend(handles=color_legend, loc='lower left',
+                  title='System', fontsize=9, title_fontsize=10, framealpha=0.95)
+
+        # Depth annotation
+        depths = nx.single_source_shortest_path_length(
+            self.graph, 'INITIAL_STATE')
+        max_d = max(depths.values())
+        ax.annotate(
+            '', xy=(max_d * 1.6 + 0.5, -1.35), xytext=(-0.5, -1.35),
+            arrowprops=dict(arrowstyle='->', color='#34495e', lw=1.2)
+        )
+        ax.text((max_d * 1.6) / 2, -1.45, 'Attack progression (exploitation depth)',
+                ha='center', fontsize=10, style='italic', color='#34495e')
+
+        ax.set_title(
+            'Attack Graph — Airport IT Simulation\n'
+            'Hub-and-spoke topology (DCS Central)',
+            fontsize=14, fontweight='bold', pad=15
+        )
+        ax.set_xlim(-1.0, max_d * 1.6 + 1.0)
+        ax.set_ylim(-1.6, 1.3)
+        ax.axis('off')
+        plt.tight_layout()
+        plt.savefig(output_file, dpi=300,
+                    bbox_inches='tight', facecolor='white')
+        plt.close()
+        print(f"[+] Saved {output_file}")
+
+    def visualise_ga_path(self, path, output_file='attack_graph_ga_path.png',
+                          path_label='GA Top-Ranked Attack Path'):
+        """
+        Render the same hierarchical layout with a single attack path highlighted.
+        Non-path elements are faded to background.
+        """
+        if not self.graph.number_of_nodes() or not path:
+            return
+
+        fig, ax = plt.subplots(figsize=(20, 12))
+        pos = self._layered_positions(self.graph)
+
+        system_colors = {
+            'external': '#27ae60', 'booking': '#3498db', 'dcs': '#e74c3c',
+            'fids': '#f39c12', 'bhs': '#9b59b6', 'redis': '#16a085',
+            'network': '#7f8c8d', 'unknown': '#bdc3c7'
+        }
+
+        path_set = set(path)
+        path_edges = set(zip(path[:-1], path[1:]))
+
+        # Background edges faded
+        bg_edges = [(u, v)
+                    for u, v in self.graph.edges() if (u, v) not in path_edges]
+        nx.draw_networkx_edges(
+            self.graph, pos, ax=ax, edgelist=bg_edges,
+            edge_color='#bdc3c7', width=0.6, alpha=0.25,
+            arrows=True, arrowsize=7, arrowstyle='-|>',
+            connectionstyle='arc3,rad=0.08', node_size=900,
+        )
+
+        type_shape = {'initial_state': 'D', 'asset': 's', 'vulnerability': 'o'}
+        type_size = {'initial_state': 1100, 'asset': 950, 'vulnerability': 600}
+
+        # Background nodes faded
+        for ntype, shape in type_shape.items():
+            for syst, color in system_colors.items():
+                nodes = [
+                    n for n, d in self.graph.nodes(data=True)
+                    if d.get('type') == ntype and d.get('system') == syst
+                    and n not in path_set
+                ]
+                if not nodes:
+                    continue
+                nx.draw_networkx_nodes(
+                    self.graph, pos, ax=ax, nodelist=nodes,
+                    node_shape=shape, node_color=color,
+                    node_size=type_size[ntype],
+                    edgecolors='gray', linewidths=0.6, alpha=0.25,
+                )
+
+        # Path edges highlighted
+        nx.draw_networkx_edges(
+            self.graph, pos, ax=ax, edgelist=list(path_edges),
+            edge_color='#c0392b', width=3.2, alpha=0.95,
+            arrows=True, arrowsize=22, arrowstyle='-|>',
+            connectionstyle='arc3,rad=0.08', node_size=900,
+        )
+
+        # Path nodes highlighted
+        for ntype, shape in type_shape.items():
+            for syst, color in system_colors.items():
+                nodes = [
+                    n for n, d in self.graph.nodes(data=True)
+                    if d.get('type') == ntype and d.get('system') == syst
+                    and n in path_set
+                ]
+                if not nodes:
+                    continue
+                nx.draw_networkx_nodes(
+                    self.graph, pos, ax=ax, nodelist=nodes,
+                    node_shape=shape, node_color=color,
+                    node_size=type_size[ntype] * 1.25,
+                    edgecolors='#c0392b', linewidths=2.2,
+                )
+
+        # Labels: full for path nodes, fade the rest
+        label_pos = {n: (x, y - 0.09) for n, (x, y) in pos.items()}
+        path_labels = {n: self._short_label(self.graph, n) for n in path_set}
+        bg_labels = {
+            n: self._short_label(self.graph, n)
+            for n in self.graph.nodes() if n not in path_set
+        }
+        nx.draw_networkx_labels(
+            self.graph, label_pos, labels=bg_labels, ax=ax,
+            font_size=5.5, font_weight='normal', alpha=0.4,
+        )
+        nx.draw_networkx_labels(
+            self.graph, label_pos, labels=path_labels, ax=ax,
+            font_size=8, font_weight='bold',
+        )
+
+        # Step numbers on path
+        for i, n in enumerate(path):
+            x, y = pos[n]
+            ax.text(x + 0.18, y + 0.14, str(i), ha='center', va='center',
+                    fontsize=9, fontweight='bold', color='white',
+                    bbox=dict(boxstyle='circle,pad=0.18',
+                              fc='#c0392b', ec='black', lw=1),
+                    zorder=10)
+
+        # Legend
+        type_legend = [
+            Line2D([0], [0], marker='D', color='w', markerfacecolor='#7f8c8d',
+                   markersize=11, markeredgecolor='black', label='Initial State'),
+            Line2D([0], [0], marker='o', color='w', markerfacecolor='#7f8c8d',
+                   markersize=10, markeredgecolor='black', label='Vulnerability'),
+            Line2D([0], [0], marker='s', color='w', markerfacecolor='#7f8c8d',
+                   markersize=11, markeredgecolor='black', label='Asset'),
+            Line2D([0], [0], color='#c0392b', lw=3.2, label='GA-ranked path'),
+        ]
+        color_legend = [
+            Patch(facecolor=system_colors['booking'],
+                  edgecolor='black', label='Booking'),
+            Patch(facecolor=system_colors['dcs'],
+                  edgecolor='black', label='DCS (hub)'),
+            Patch(facecolor=system_colors['fids'],
+                  edgecolor='black', label='FIDS'),
+            Patch(facecolor=system_colors['bhs'],
+                  edgecolor='black', label='BHS'),
+            Patch(facecolor=system_colors['redis'],
+                  edgecolor='black', label='Redis'),
+            Patch(facecolor=system_colors['network'],
+                  edgecolor='black', label='Network'),
+        ]
+        leg1 = ax.legend(handles=type_legend, loc='upper left',
+                         title='Node Type', fontsize=9, title_fontsize=10, framealpha=0.95)
+        ax.add_artist(leg1)
+        ax.legend(handles=color_legend, loc='lower right',
+                  title='System', fontsize=9, title_fontsize=10, framealpha=0.95, ncol=2)
+
+        depths = nx.single_source_shortest_path_length(
+            self.graph, 'INITIAL_STATE')
+        max_d = max(depths.values())
+        ax.annotate(
+            '', xy=(max_d * 1.6 + 0.5, -1.35), xytext=(-0.5, -1.35),
+            arrowprops=dict(arrowstyle='->', color='#34495e', lw=1.2)
+        )
+        ax.text((max_d * 1.6) / 2 - 2.0, -1.45, 'Attack progression (exploitation depth)',
+                ha='center', fontsize=10, style='italic', color='#34495e')
+
+        ax.set_title(
+            f'{path_label}\n'
+            f'Numbered steps trace exploitation order ({len(path)-1} hops, '
+            f'{len(path)} nodes)',
+            fontsize=14, fontweight='bold', pad=15
+        )
+        ax.set_xlim(-1.0, max_d * 1.6 + 1.0)
+        ax.set_ylim(-1.6, 1.3)
+        ax.axis('off')
+        plt.tight_layout()
+        plt.savefig(output_file, dpi=300,
+                    bbox_inches='tight', facecolor='white')
+        plt.close()
         print(f"[+] Saved {output_file}")
 
     def export_graph(self, output_file='attack_graph.json'):
@@ -309,8 +601,9 @@ def main():
     m = g.calculate_path_metrics()
     print(
         f"\n  Nodes: {m['total_nodes']} | Edges: {m['total_edges']} | Density: {m['density']:.3f}")
-    g.identify_critical_paths()
-    g.visualise_graph()
+
+    g.visualise_graph('attack_graph.png')
+
     g.export_graph()
     print("\n"+"="*60+"\nComplete!\n"+"="*60)
 
