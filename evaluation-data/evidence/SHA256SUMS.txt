@@ -1,0 +1,140 @@
+492cc76a1ff7ea18fdd022bb90cb047a4072329e53ea0c0907d8370a5706eb87  ./trial_01_cvss/logs/cvss_run1.txt
+0fd37041f1711877d439ee0143a225251edd28210a9ac1f73140d2ebcac61030  ./trial_01_cvss/logs/timing1.txt
+903831165dbf54aba2ce78ccd60bee5bd4daf6ef203515e1f62308d70c33db20  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 08.41.27.png
+cf400e6557c89d07724ad8c6426c6ec4111c519c25685a9e89e86a8afb0b37a4  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 08.42.56.png
+466388d8d401b48f03b1e2fc2d02b10cce5577d68fc5f12d6b4b3a85bd7c42dd  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 08.46.52.png
+cc56bf393cce720b5dc6c12e67db5acd6c9eabd2e26000810e59341ae528b066  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 08.48.44.png
+e782084771996a7b2946bd3025ab168c68906993024b16bb1d576a585aa22b41  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 08.50.21.png
+2940e3a91f19ef894e31016ba7159b74be4ad4ffdf9a706bc888e45eba804995  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 08.55.09.png
+3142cd5fa845bbd021056864b1fe96a5ce2739a4fbd6c76c4267edf021bb5187  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 08.57.46.png
+868c8eb932c371600c8d63501ad6e2e43d798b25485395ef70ba3586c6da61a9  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 09.01.06.png
+06da69bbe5a97d34ea90d41f4b2c304632e1507ad71e29dc4c5bc2dfb819033d  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 09.03.27.png
+9d368b95862fbd81058865741372ff84c20d46a43913ffbc5f49928bde085275  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 09.08.13.png
+8d952f8cabe88bf93ace177b9dcdf1f3f101d2eb068feda9129aa361658ebfb7  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 09.40.20.png
+4ae8b1fbeb2952fc6858862380b4c05f6135f7e53039ac9a246fdc46b88d30dc  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 09.40.28.png
+e58d57e2c8e84aac99ee4b6476edfdf04f1a94a9b4919fa38ed92bd4d0c90f36  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 09.40.40.png
+b4c6398ae14d7c18502c77bd0c056c61bbb6c2d1d33d8ecf13be874dd0f35dc4  ./trial_01_cvss/screenshots/Screenshot 2026-04-16 at 09.40.47.png
+b894fc2ddab8a4a978805d28687a0287412d490f93a8f83ff50e44e1263909a6  ./trial_01_ga/logs/ga_run1.txt
+b6bc7ec0e7cf5bb25c52808a3034434396df71d3369e6bda606df6ce82622fea  ./trial_01_ga/logs/timing1.txt
+935df02949c61e65a3090d4f392211e62825650c28ae69a26ad90c59c60286fe  ./trial_01_ga/screenshots/Screenshot 2026-04-22 at 10.43.41.png
+6a26cc6dbff0a7de57d77f0ad456b1b9ab3ba52f5c7bbba9541435a3409a57a4  ./trial_01_ga/screenshots/Screenshot 2026-04-22 at 10.44.40.png
+41986b809b99502b6124b0da48d2c6e9497339c3c9ecea8434b7861817e4ee2c  ./trial_01_ga/screenshots/Screenshot 2026-04-22 at 10.46.54.png
+819a4b16dc3cba53c0cc99fe0989fced9e386ca8fdf35e522edc9c139b68a234  ./trial_01_ga/screenshots/Screenshot 2026-04-22 at 10.48.13.png
+6b1601993e653c431d020f565fff2e2e127ff51625fb632ee0ec83b26f8c4e2a  ./trial_01_ga/screenshots/Screenshot 2026-04-22 at 10.50.02.png
+1d193bf543009ba236e21a45d74f5854823bc48a8584702e57d01b369e95d5c9  ./trial_01_ga/screenshots/Screenshot 2026-04-22 at 10.59.12.png
+b7885f64ecaefe0e86cb38a0a4a98dd44e1f13f627ef4132488010350b47042b  ./trial_01_ga/screenshots/Screenshot 2026-04-22 at 11.02.13.png
+11a019688364d6472d5dda304072ed59dd0e437e0f7d2f3b6297790dcb47e031  ./trial_01_ga/screenshots/Screenshot 2026-04-22 at 11.06.08.png
+069aeee1b0d5514d0c088516ea7ff8018b020a5296fbc1b3bafa448d4d9a2721  ./trial_01_ga/screenshots/Screenshot 2026-04-22 at 11.07.31.png
+fafcb4c36067410cdf8d7f196e904a73da8376494dd94c3dc45dd583c3fe0e61  ./trial_01_ga/screenshots/Screenshot 2026-04-22 at 11.11.19.png
+740073d925e26b867265a9bc9e836928340af0cb372da0631ba3f3947b2a256d  ./trial_01_ga/screenshots/Screenshot 2026-04-22 at 11.11.48.png
+6e8404c2c61ef865679baac8e3a19189f5216069b62edfe75a30a5f226ad92dd  ./trial_01_manual/logs/baseline_run1.txt
+41445fbd0197828c19c8d631d0d22d556a17b81fff325d81b26528903f80bcff  ./trial_01_manual/logs/timing1.txt
+f3cf84443dde71f972b1456790cf084473e59268461c0367fca212c99398182d  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.26.28.png
+d27dfe3da1dfab178c36d99422f538193dfc778b67468c0a224e975abb9aae32  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.27.24.png
+68aa50b3fb0d7ab749c1a24793c2e78904052f4a2ae552b619e35907563a793e  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.28.05.png
+f27adaedb82ed761b0af88260c11f03a6ec4336dc634bd2f29631a6d92f006b4  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.29.05.png
+a009fe22131cd5ecf5504e012dba725cb06aab5af4cad133f12ca30757f742b8  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.29.25.png
+0f513ea8f6913ad17456a93e41f40462ad080b91f4a864e160bc69faaaec6d23  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.29.26.png
+46bb67a5ac86b5b0faeb1182d45f93ed342fe3395244e103af6915d5e0b11821  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.30.04.png
+b25cfbbced95c3659403fcf905704a9dfecd26a6c9b1bcf1119903bc21131020  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.30.42.png
+db3aaaf189e9cdca51dd5edf110fbe598e4c37ae63089454100e0dbc6efe6edc  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.30.44.png
+cf776c65056407a7ad3501c44c043a94d71bcb530ab5be6d3392756e2ac493f4  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.31.51.png
+d731be3e2e761a765f083f74b801f176fe8a1cfbcdd6a9f10739f01541baacb9  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.32.27.png
+c81f3beae16dfd345cce25680281834c874cb1471847bb56ed161cdde352f953  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.34.26.png
+15412da52ae7b10a5033872f57abd02800f2146ac519e0d2096b2c4031c57eab  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.39.18.png
+e533ded29725365856bcd123418562b937f73a52b6b6efffc2ed76aaa068e2fa  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.40.46.png
+2485186f1c3bb2abe02612f79e8e4c787763e274d3b6dc936da8a84d8613cc72  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.43.06.png
+713aececfd8a016076c87fa4e5e262560ab9e5320ce9a60cf82670ed301918c2  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.46.17.png
+6ca89ef4f447af7443a7fd674e890d544458560d7149053dd304ac1c6a61ec17  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.47.37.png
+8cc78f49a630f7294eba012b44f47bb63636d4de8de8ec9b532f49190d16162f  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.52.13.png
+5a488601cf846e130b37733a283c895e8a724b138e321353be7cde269e51c565  ./trial_01_manual/screenshots/Screenshot 2026-04-21 at 09.54.37.png
+13beb5cf144cc90761c0a53ef09595bf50085eeeb3790c71be53783d842958da  ./trial_02_cvss/logs/cvss_run2.txt
+0d24847c277dd2efe2d520bb8dbc189a59e3676f993d27d990426093d3d1d13d  ./trial_02_cvss/logs/timing2.txt
+034ebbda3b8bfd1ce54a5d467096a841de12721cb6107cc49a944585054c42ff  ./trial_02_cvss/screenshots/Screenshot 2026-04-16 at 10.05.41.png
+d3b04982ca33a8bb378f2af1534f51369b5509ab9c3c3d0e5c2d7a7595d240ed  ./trial_02_cvss/screenshots/Screenshot 2026-04-16 at 10.09.35.png
+2172fe43a602afbf8336ca33905d9ea00b41f359f277dd25826b9b78c8afe6d9  ./trial_02_cvss/screenshots/Screenshot 2026-04-16 at 10.10.22.png
+aa9b500186cfc0ab1c03b6f7ef6989bb00e739bff1aa75c9ef7acad7d8d92c9a  ./trial_02_cvss/screenshots/Screenshot 2026-04-16 at 10.11.15.png
+6bc66797df14b674784542c131a8b642cf0c503fdf49f7f44a6c3d1179211749  ./trial_02_cvss/screenshots/Screenshot 2026-04-16 at 10.12.17.png
+72facbf0c1d8f1b3deaa997e7395e8000d8a80ac0a23a0c600b218fdebba1c9f  ./trial_02_cvss/screenshots/Screenshot 2026-04-16 at 10.14.33.png
+3ac3bccf61095dae3f01f4d3171cca2e82371be8d1fb26bb6fee5c69bbfc05e4  ./trial_02_cvss/screenshots/Screenshot 2026-04-16 at 10.14.42.png
+22fff0642e0834ec40322e732370574aca9760db0dd5ed47a5aa63e3621f0b59  ./trial_02_cvss/screenshots/Screenshot 2026-04-16 at 10.16.37.png
+5047a2d8d545a7d624d0f199e8de0421bca11d66cb20245f890884937f5ba394  ./trial_02_cvss/screenshots/Screenshot 2026-04-16 at 10.17.23.png
+bc90867751ddf0d6850d8bdfb20e590ad5c8a143c8ced056dd4cce9663d8cf9f  ./trial_02_cvss/screenshots/Screenshot 2026-04-16 at 10.37.31.png
+f913613c9b8016c26c9e6c70f583df11852b152d15503ab146e23b65646644c1  ./trial_02_ga/logs/ga_run2.txt
+d6b3250a98c548542a6e9be2d12f1f26de15c4eadbbd984d9fc2d240083b882b  ./trial_02_ga/logs/timing2.txt
+19995cc9f987632f1145c24498499a8b68d5f8b661251b350ab0fbca4d2f9c4f  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.29.00 1.png
+fb766201d587df63ccfcc0111a6c7ed3558c8cb93bc85bcfbce9120df1702fcc  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.29.00.png
+bcb89524672d2cab8e4bc1035253f0738581e550850905ae0fc634b2d6b6f9dc  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.30.17.png
+47d54982ec6246774220439acac280568e26c32b08d484733f1426df3d7d1067  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.31.40.png
+5538ff9d66626ffb4d223d8f5e73848af48f41cef3899ce5fda4d7196d40cad9  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.32.44.png
+ca9f6a862713fbd77a3f634a00113369b72abf85aa878b70f5668f563fac741b  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.33.30.png
+c9f4c6236f9f4a8eef00287ade25d0d46150704facb56049af841826cd60d940  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.34.06.png
+189904c5862740fdd417394317ae38f77710582b774b532c37e9865722cb90f1  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.41.20.png
+2b28491dde1430a59d65dde76300bd5ecf6d8214dd2a60e3b2a7cc4c8cb8ee34  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.41.30.png
+cc0f542a1308d8b5218d00e30c06fede6b9d55f02bc1471b5b703f9a5e20baab  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.41.40.png
+4d8b73b6c75f293fe726eb0603f1a4985e71e5406b1e33d0b781b6376cbd9ae8  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.45.37.png
+d20fb704d67d3c119c61e7f7c8a74dab28501994a9748919901ae0f79a68737a  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.46.09.png
+7870d0046e50aea922ac234afcbc54bb0361c72548e40d92199abef1c17a8f8a  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.47.54.png
+11525aa5e695f342ef463e773255b8c3c5050f9b6015b01d5cdf6532d041bdd5  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.48.52.png
+b6d03f8e2e142b597aa592fe95cd7f860adbf6781661576fffd903517eb0c255  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.51.28.png
+6fb6ebb9cb425f8887b30cc5c076190b5a7ae61b87018bd053ff593ba3b94630  ./trial_02_ga/screenshots/Screenshot 2026-04-22 at 11.52.50.png
+4840aff06ac6b6770c15ab7ec10018e00d212455bd2ac1c3064c40750f1b0cc0  ./trial_02_manual/logs/baseline_run2.txt
+2e940a23fd5d90a0a7e4632a48071b1708f66c2a4b0c6162cc4b9303c92fc8e9  ./trial_02_manual/logs/timing2.txt
+e5d979b3ff42545207da114725434d12ea965a431879fef42da756aba24d1bfe  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.06.10.png
+b45bebfb1f30c55c1ae05f8ee63c6c0a9ffadce45cf7ae85b531bfac732b054b  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.08.20.png
+4470f3a016c4615045a9be9ade832d8cf26841b69c2ac97bb081f95e766468d8  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.08.54.png
+941969d81af0bf40a1e2fe237909f3e4be624bd91c676d61ce0da7f06776cf5c  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.10.18.png
+7d7d96130300d5855c40985e73b94f0cfab8abd59be136544c4ffdca0f877f56  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.12.49.png
+4fa3609dbefefd61a627535041042ea27fed3d214a530d65d8ec2f16cf8735f5  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.12.56.png
+e7980c1247d0477333e553d18c67f164d7f57016ed6c16e6dd4150cef09c5308  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.13.21.png
+a40d6b998fbbc388ae571b36ecd36c4887e49a64b6a6bbffa7b687f70947bd7e  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.15.18.png
+9d9c99dfc0a83441ffe8a634461ab49099141305c44ff16b0ee97ebcc5871a84  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.17.43.png
+78b96298ba79f58b3689cdb23ecac88338cf24223ee661655b6f523e4f0db576  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.19.05.png
+39bc15c4a484605ef9a5c217b574599e1ecd9785a533001f21b3d31244a09a4a  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.19.45.png
+7b15737711c6c77dfb16ecb4313a4d1f9fe5fcf9bc79abd68692ce2f77cd032f  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.20.42.png
+363ddee966407e57d8b678708125c9dbdb9129665cf43003550bbb063bb68e78  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.22.55.png
+275c4079daf8c2bfcc94d55392da430e0a0d6cc2f970167ccdfca851416b7ad7  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.23.32.png
+4133d14751ad0fb5c9d29258edb694f074b5e6c4485777a46a663a03a1898f11  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.26.26.png
+fc700628a4ebc2da0405987b589b01f1b3dc219591dd00e3b84c992e8b6ee599  ./trial_02_manual/screenshots/Screenshot 2026-04-21 at 11.26.32.png
+03c9d03c55698438e69d759b742067cb91345774861052036f8d5c7b4b0ee61f  ./trial_03_cvss/logs/cvss_run3.txt
+a4ae728af0ad53c2298d86d512d305f2ef9923b67d3700ff5d3eb4e94484c95d  ./trial_03_cvss/logs/timing3.txt
+6ace44702d611510f91a9df99fd35b1aae08f1865d3f7fe1ad01ffff30e79f09  ./trial_03_cvss/screenshots/Screenshot 2026-04-16 at 12.00.31.png
+bf226c70207a9a06fe0a8e3d0e20ccf6a0769020f2326316656e43231bbe18be  ./trial_03_cvss/screenshots/Screenshot 2026-04-16 at 12.01.31.png
+b8e4a1b536107916710cf0fcc668c0bb6bd192ef52e7b17771f9abd6f4d445ab  ./trial_03_cvss/screenshots/Screenshot 2026-04-16 at 12.02.06.png
+567078f6605b57aaf3edc2aaade46c5aad0850fb4ed90ff5dcad51f195c62798  ./trial_03_cvss/screenshots/Screenshot 2026-04-16 at 12.05.40.png
+4177de22aca00272f1b18a24a3436e3ad215a946c9d02f183b764c72ca2a56c9  ./trial_03_cvss/screenshots/Screenshot 2026-04-16 at 12.07.41.png
+269d3bf341018a6d3a954152633b35218b12e77e8ec98dbd57f32cef36572621  ./trial_03_cvss/screenshots/Screenshot 2026-04-16 at 12.08.19.png
+3b5fb013812fb6954e3d030d9d8d8056efa95426b2dc112d126d8f690a6991fe  ./trial_03_cvss/screenshots/Screenshot 2026-04-16 at 12.09.40.png
+83a9b529f15e0fcaede0b410248e424295201ad3d58b487e0469de3f09b4c3e3  ./trial_03_cvss/screenshots/Screenshot 2026-04-16 at 12.27.32.png
+9c3aa10a7cdd2148d87b69100492db81e998e9f0981a3372f935a56ecd59554d  ./trial_03_cvss/screenshots/Screenshot 2026-04-16 at 12.27.39.png
+f857c6e925e849c8b59d49a7f26acbf640420554304b2f823b2128eea56dd8d2  ./trial_03_ga/logs/ga_run3.txt
+ce8a983c8c5f580150623c563632e88c800b27538d92ef7b0d14949ed825b86e  ./trial_03_ga/logs/service_password.txt
+71f1901a4a8707a37334a16963d478f5fdb8f7f3f4da47fae77bc7232ed9756b  ./trial_03_ga/logs/timing3.txt
+1d2295ef22203335559ba22f9f357f20beb756952dc40cbead3aea34fba67081  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.16.44.png
+382016e12b2af50c9042c288cbb68cd12dc99d254be0767badfd774adcca14dc  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.16.47.png
+89f91453ded46c1b3155fbaf30242c56ea85a664aa645426f0d280721d80c0e7  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.17.56.png
+b866668b9a6920e7b7e78256c56e10f73f2d189d3b360ac76bbd960434bb95c4  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.19.47.png
+5325f39483d6bf91685a79180003e5d716a31769462dcb4cd1349f7bba0bc716  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.20.48.png
+6ae8a0145c71fa40351c622c2bb291aa84c9ca3ce49184c923b03f3eb466c027  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.21.57.png
+7cc5d521ea3b4547cde54e03a8b9e83482b34a222bca40e866907153692e0fcb  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.31.20.png
+7332cab98344aae02256b1aa66aa3424670b20091660a58e78118dc5a1cbd4b1  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.31.49.png
+81a8d36a181717464179b1bfc9e737562d4d20362a004587ec34a5da7543fced  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.35.17.png
+f82593c1f209ca28c002217b088b148477b2626f937eb5911b6b4d0e76c70a5f  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.37.37.png
+b348af6e22c2fe51b68c80ed522fe8161089843d6b8f799101d2aad6250635eb  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.40.05.png
+bc2287cce1002e0fb1b1d2db1fe7c68a1e7e3ea63f617565b95f531ad2df4e95  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.44.04.png
+67467a1662067e8df3bb2c8f1a0b0ec8cd78606209e2f6933f07e3bdeb1ef03b  ./trial_03_ga/screenshots/Screenshot 2026-04-22 at 12.44.52.png
+a71c4fa1c3c90aa94c8c314be8ecdf18a8daf7c539c6cb4d397906beaa32bed8  ./trial_03_manual/logs/baseline_run3.txt
+30e9462c2be6ac940bdad7e5625f23d0c573f32ab6bc42649a399d5ea1d8acfb  ./trial_03_manual/logs/timing3.txt
+5ed44f2559eafd91dda5905898e21c753d76058f6b06d926004831cff964b306  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.30.55.png
+8d906835c0f0d62761461d7af9686fd0fc48fdb0f188b3e1e549f241382c60bc  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.33.00.png
+8f3c6010882292f1e7cc17d0aa9e7ef277a97bc00e258bac5e22d355c61c7711  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.33.56.png
+b3680f1a1d4686526df7fdb524ced28a40d1e71a6be495c01ef7fd1f302eb7c3  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.34.03.png
+26f73d3173a6da00ec65e59b819b02d9d724c28138796e110257a606888550db  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.35.48.png
+c64819c18b2138e7c7008e4476b8faa8b41461bff9baacd760070288b35d4e86  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.38.20.png
+418bab1915ed390c9fd9ff315ead1630460e6de831abb747fdde4dd1a917bfc0  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.39.21.png
+fa0d80fa84d61e2dd09aa46d6d53d6ab93efd9ad8bdc78e54077d653f9e59d99  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.41.18.png
+97999504c994014c1539867c33ba4b93d1000cb90dbf517f62aff55670cc25e4  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.44.42.png
+9aa77aa6d6a5c2dd153db32a11996f0bd691ed32066e4a2e3ed9700194e4c52f  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.45.10.png
+afd02f9291a116fd60f93bd980132340a309fd9b0b21a131775f8ce264dc465c  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.47.29.png
+ea283d085718416e682c44b18014183a028ba85d956e1ff15a7d00f3073774e9  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.48.56.png
+15768644e58ecc29a3186d9c6b5ab40668205032db416a265eaab0aa246013b4  ./trial_03_manual/screenshots/Screenshot 2026-04-21 at 13.55.47.png
