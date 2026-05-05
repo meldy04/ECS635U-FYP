@@ -44,7 +44,13 @@ python ga_optimiser.py
 ```
 
 ## Reproducing the Experimental Results
-Plotting scripts for the comparative figures can be found in `evaluation-data/`:
+Trial evidence and plotting scripts for the comparative figures can be found in `evaluation-data/`.
+
+For trial evidence per trial:
+```bash
+cd evaluation-data/evidence
+```
+For plotting scripts:
 ```bash
 cd evaluation-data
 python assets_over_time.py
